@@ -1,0 +1,451 @@
+:root {
+    --orange: #ec5d31;
+	--lightGrey: #eadecd;
+    --purple: #5e3388;
+    --grey: #c4c4c4; 
+    --darkGrey: #0f1011db;
+    --mediumGrey:#464646;
+    --active: #82D485;
+    --danger: #DC3545;
+    --update: orange;
+    --font-1: 'Acme';
+    --font-2: 'Roboto';
+    --font-nav: 'Open Sans';
+}
+
+/*Body*/
+* {
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+	background: url("../pictures/background.jpg");
+	background-attachment: fixed;
+} 
+
+textarea {
+    resize: none;
+}
+
+main {
+    margin-top: 120px;
+}
+
+h1,
+h2,
+h3
+{
+    font-family: 'Acme', sans-serif;
+}
+
+h1 {
+	font-size:3rem;
+	color:white;
+}
+
+h1 span {
+	font-size: 2.8rem;
+}
+
+h2 {
+ font-size: 2.7rem;
+ color:white;
+}
+
+
+
+header {
+	box-sizing: border-box;
+}
+
+p, label, ul {
+	font-size: 1.2rem;
+}
+
+
+hr {
+	/*
+    background: rgba(94, 51, 136, 0.3);
+    */
+    background: white;
+    box-sizing: border-box;
+/* } */
+}
+
+.background {
+	width: 100%;
+	position: fixed;
+	z-index: -10;
+	opacity: 0.8;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+.title {
+	color: white;
+}
+
+.btn {
+	font-size: 1.2rem;
+    background: var(--purple);
+    border: none;
+}
+
+.btn:hover {
+    background: var(--orange);
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.9);
+    margin-right: 5px;
+    animation: toRight 0.5s;
+}
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    font-size: 1rem;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--danger);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 13px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--active);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--active);
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(39px);
+    -ms-transform: translateX(39px);
+    transform: translateX(39px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 5px;   
+}
+
+.slider.round:before {
+    border-radius:3px;    
+}
+
+.switch_on, .switch_off {
+    position: absolute;
+    bottom: 3px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.switch_on {
+    left: 5px;
+    display: none;
+}
+
+.switch_off {
+    right: 5px;
+}
+
+input:checked ~ .switch_off {
+    display: none;
+}
+
+input:checked ~ .switch_on {
+    display: block;
+}
+
+
+/*Icone quit*/
+.quitIcon {
+    height: 30px;
+}
+
+.quitIcon a {
+    cursor: pointer;
+}
+
+.quitIcon svg {
+    height: 100%;
+    width: auto;
+    fill: var(--grey);
+}
+
+.quitIcon svg:hover {
+    fill:var(--danger);
+}
+
+/*Badges*/
+.badge {
+	color: white !important;
+	font-size: 1.2rem;
+	height: 2.5rem;
+	font-weight: lighter;
+    fill: var(--danger);
+    padding: 0 20px;
+}
+
+.yellowBadge {
+	color: black;
+	text-shadow: none;
+}
+
+.non_highlighted
+{
+ -moz-user-select: none; /* Firefox */
+ -webkit-user-select: none; /* Chrome, Safari, Opéra depuis la version 15 */
+ -ms-user-select: none; /* Internet explorer depuis la version 10 et Edge */
+ user-select: none; /* Propriété standard */
+}
+
+/* requiredField stars */
+.requiredField{
+	color:red;
+}
+
+.requiredFieldInfo{
+	font-size: 0.9rem;
+}
+
+.titleSvg{
+	max-width: 50px;
+    min-width: 50px;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+	
+	* {
+  		font-size:0.75em;
+	}
+	
+	
+	h1 {
+		font-size: 2.5rem;	
+	}
+	
+	h1 span {
+		font-size: 2.2rem;	
+	}
+	
+	h2 {
+		font-size: 2.2rem;
+	}
+	
+	small {
+		font-size: 1rem;
+	}
+		
+	.table_error {
+		font-size: 1.2rem;
+	}
+	
+	.switch_on {
+		font-size: 1.3rem;
+	} 
+	
+	.switch_off {
+		font-size: 1.3rem;
+	}
+	
+		
+	.pcard {
+		height: 2rem;
+	}
+	
+	.customCard {
+		text-shadow: none;
+	}
+}
+
+/*-----------------------------------------------------Home Style--------------------------------------------------------------*/
+
+/*Card*/
+.containerTitleStyle {
+    width: 80%;
+    padding: 0;
+}
+
+.card-header {
+    background: var(--lightGrey);
+    padding: 20px inherit;
+}
+
+.gameCard {
+	border:1px solid var(--darkGrey);
+	border-radius:0px;
+	background:white;
+	background-size: cover;
+	background-position: center;
+	min-height: 150px;
+}
+
+.gamePictureContainer {
+	height:150px;
+	width: auto;
+}
+
+.gamePictureContainer img {
+	height:auto;
+	max-height:100%;
+	width: auto;
+	max-width: 100%;
+}
+
+
+.gameCardText {
+	background: var(--darkGrey);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--drakGrey);
+    text-align: center;
+    justify-content:center;
+    color: white;
+}
+
+.regGamesMsg {
+	margin-top: 1.5rem!important;
+}
+
+.regMessage {
+    text-align: center;
+    color: red;
+}
+
+.containerStyle {
+    border: 1px solid var(--purple);
+    text-shadow: none !important;
+    position: relative;
+    background: white;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    padding: 0;
+    color: rgba(0, 0, 0, .8);
+    text-shadow: none !important;
+    line-height: 1.5;
+    margin: 15px auto;
+}
+
+.containerStyle:before,
+.containerStyle:after {
+    z-index: -1;
+    position: absolute;
+    content: "";
+    bottom: 15px;
+    left: 10px;
+    width: 50%;
+    top: 80%;
+    max-width: 300px;
+    background: rgba(0, 0, 0, 0.7);
+    box-shadow: 0 15px 10px rgba(0, 0, 0, 0.7);
+    transform: rotate(-2deg);
+}
+
+.containerStyle:after {
+    transform: rotate(2deg);
+    right: 10px;
+    left: auto;
+}
+
+@keyframes toRight {
+
+    from {
+        margin-right: 0;
+    }
+
+    to {
+        margin-right: 5px;
+    }
+}
+
+.regMessage {
+    text-align: center;
+    color: red;
+}
+
+.subscribeForm {
+	font-size: 1.5rem!important;
+}
+
+/*Details*/
+.badgeDetails {
+	width: 3.2rem;
+	margin-left: 1rem;
+	background-color:var(--purple);
+}
+
+.subscribeModifBtn {
+	
+	height: 3rem;
+	font-size: 1.2rem;
+    min-width: 200px;
+    width: 220px;   
+}
+
+.stateBadge {
+	font-size: 1.2rem;
+}
+
+.eventSubscribeMsg {
+	color: var(--purple);
+}
+
+.border {
+	border: 1px solid var(--grey)!important;
+}
+
+.mainPanel {
+	width: 100%;
+}
+
+.editorRegRecap table {
+	width: 90%;
+	margin: 0 auto;
+	border: none;
+}
+
+.editorRegRecap table th,.editorRegRecap table td {
+	width: 26%;
+}
+
+@media (max-width: 600px) {
+	.gamePictureContainer {
+		height:100px;
+	}.
+}

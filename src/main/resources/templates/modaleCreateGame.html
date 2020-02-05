@@ -1,0 +1,89 @@
+<div class="modal fade" id="formCreate" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="modaleCreation">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title modalTitle" id="exampleModalLabel">Ajout du jeu à l'événement</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <div class="modal-body pt-0">
+          <form method="POST" th:action="@{/addGameToRegistration#games}" enctype="multipart/form-data">
+	          <div th:if="${gamesSocietyOnly.size() !=0}" class="form-group mt-1 mb-1">
+	          	<hr />
+	            <label for="name">Choisissez un jeu de votre bibliotheque</label>
+				<div class="d-flex row align-item-center justify-content-around">
+					<select name="gameId" class="custom-select col-6">
+					    <option value="" selected disabled>Selectionner un jeu</option>
+					    <option th:each="game : ${gamesSocietyOnly}" th:value="${game.id}" th:text="${game.name}"/>
+					</select>
+					<input type="hidden" name="registrationId" th:value="${registration.id}">
+					<button type="submit" class="btn btn-primary col-4">Ajouter</button>
+					<p class="align-self-center text-center col-12 mt-3 mb-0">ou</p>
+				</div>
+	         </div>
+	     </form>
+         <h5 class="modal-title mb-3 modalTitle" id="exampleModalLabel">Création du jeu</h5>
+         <hr />
+         <form method="POST" th:action="@{/addRegistrationGame#games}" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="name">Nom du jeu *</label>
+            <input type="text" class="form-control" id="name" name="name" aria-describedby="nameGameHelp" placeholder="Nom du jeu" required>
+            <small id="nameGameHelp" class="form-text text-muted smallText">Indiquez le nom du jeu</small>
+          </div>
+          <div class="form-group">
+            	<label for="pictureCreate">Image:</label>
+				<input type="file" id="pictureCreate" name="filePicture" class="pictureSelectBtn" aria-describedby="pictureHelp" accept="image/png, image/jpeg">
+				<img id="picturePreviewCreate" src="#" alt="your image" class="d-none"/>            
+				<small id="pictureHelp" class="form-text text-muted smallText">Choisissez une image</small>
+				<input type="hidden" name="picture" value="">
+          </div>        
+          <div class="form-group">
+            <label for="author">Auteur</label>
+            <input type="text" class="form-control" id="author" name="author" aria-describedby="authorHelp" placeholder="Nom de l'auteur">
+            <small id="authorHelp" class="form-text text-muted smallText">Indiquez l'auteur du jeu</small>
+          </div>
+          <div class="form-group">
+            <label for="editor">Éditeur</label>
+            <input type="text" class="form-control" id="editor" name="editor" aria-describedby="editorHelp" placeholder="Nom de l'éditeur">
+            <small id="editorHelp" class="form-text text-muted smallText">Indiquez l'éditeur du jeu</small>
+          </div>
+          <div class="form-group">
+            <label for="distributor">Distributeur</label>
+            <input type="text" class="form-control" id="distributor" name="distributor" aria-describedby="distributorHelp" placeholder="Nom du distributeur">
+            <small id="distributorHelp" class="form-text text-muted smallText">Indiquez le distributeur du jeu</small>
+          </div>
+          <div class="form-group">
+            <label for="publicationDate">Date de publication</label>
+            <input type="date" class="form-control" id="publicationDate" name="publicationDate" aria-describedby="dateHelp" placeholder="Date de publication">
+          	<small id="dateHelp" class="form-text text-muted smallText">Indiquez la date de publication du jeu</small>
+          </div>
+          <div class="form-group">
+            <label for="category">Catégorie de jeux</label>
+            <input type="text" class="form-control" id="category" name="category" aria-describedby="categoryHelp" placeholder="Catégorie de jeux">
+            <small id="categoryHelp" class="form-text text-muted smallText">Indiquez la catégorie du jeux (jeux de rôle, jeux de coopération...)</small>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea rows="5" cols="40" class="form-control" id="description" aria-describedby="descriptionHelp" name="description" placeholder="Description"></textarea>
+          	<small id="descriptionHelp" class="form-text text-muted smallText">Indiquez la description du jeu</small>
+          </div>
+          <div class="form-group">
+            <label for="webLink">URL</label>
+            <input type="URL" class="form-control" id="url" name="webLink" aria-describedby="linkHelp">
+            <small id="linkHelp" class="form-text text-muted smallText">Lien du jeu (optionnel)</small>
+          </div>
+          <div class="form-group">
+            <label for="price">Prix</label>
+            <input type="number" class="form-control" id="price" name="price" aria-describedby="priceHelp" value="0">
+            <small id="priceHelp" class="form-text text-muted smallText">Prix (indicatif)</small>
+          </div>
+        <input type="hidden" name="registrationId" th:value="${registration.id}">
+        <input type="hidden" name="societyId" th:value="${society.id}">
+        <div class="modal-footer border-top-0 d-flex justify-content-center">
+          <button type="submit" class="btn btn-success ml-auto" data-target="games">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

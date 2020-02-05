@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Acme&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Acme|Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../CSS/adminEditorRegistrationModif.css">
+    <link rel="stylesheet" type="text/css" href="../../CSS/adminHome.css">
+    <link rel="stylesheet" type="text/css" href="../../CSS/toast.css">
+    <title>Modification des inscriptions éditeurs</title>
+    <script>
+        var toastMsg = "[[${toastMsg}]]";
+    </script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <aside th:replace="adminSidebar.html :: sidebar"></aside>
+        <div th:replace="adminSidebar.html :: navbar"></div>
+        <section id="content-wrapper">
+            <div class="row d-flex justify-content-between flex-wrap">
+                <div class="col">
+                    <h2 class="content-title mt-3 mb-4" th:text="|Modification de l'inscription de l'éditeur ${registration.society.name}|">Gestion des inscriptions des éditeurs</h2>
+                </div>
+                <form class="d-flex align-items-center " th:action="@{/admin/gestionDesInscriptions}">
+                	<input type="hidden" name="eventId" th:value="${registration.event.id}">
+                	<button type="submit" class="btn btnCustom m-3">Retour</button>
+                </form>
+            </div>
+            
+            <div class="accordion" id="accordionUpdateRegistration">
+
+	            <div class="card">
+	                <div class="card-header" id="headingInfo">
+	                    <h2 class="mb-0">
+	                        <a href="#collapseInfo" class="btn btn-link" data-toggle="collapse" aria-expanded="false" aria-controls="collapseInfo">
+	                            Informations générales
+	                        </a>
+	                    </h2>
+	                </div>
+	                <div id="collapseInfo" class="collapse show" aria-labelledby="headingInfo" data-parent="#accordionUpdateRegistration">
+	                    <div class="card-body">
+	                     <form class="row" method="post" th:action="@{/admin/saveModifiedEditorReg}" th:object="${registration}">
+	                     <div class="card-body row justify-content-around">
+	                         <div class="col-12 col-lg-4 justify-content-center mx-auto">
+	                             <label class="col-10" for="electricalSupplyNeed">Besoin d'un raccord au réseau éléctrique</label>
+	                             <input type="checkbox" id="electricalSupplyNeed" name="electricalSupplyNeed" th:checked="*{electricalSupplyNeed}">
+	                             <label class="col-10" for="saleOption">Vente de produits</label>
+	                             <input type="checkbox" id="saleOption" class="saleOption" name="saleOption" th:checked="*{saleOption}">
+	                             <label class="col-10" for="agent">Présence de collaborateur(s)</label>
+	                             <input type="checkbox" id="agent" name="agentProvided" th:checked="*{agentProvided}">
+	                             <label class="col-10" for="volunteer">Besoin de bénévoles</label>
+	                             <input type="checkbox" id="volunteer" name="volunteersNeed" th:checked="*{volunteersNeed}" />
+	                             <label class="col-8" for="tablesQuantity">Nombre de tables demandées</label>
+	                             <input class="col-3" type="text" id="tablesQuantity" name="tablesQuantity" th:field="*{tablesQuantity}" />
+	                             <label class="col-8 col-lg-8" for="registrationCost">Coût de l'inscription (€)</label>
+	                             <input class="col-3" type="text" id="registrationCost" name="registrationCost" th:field="*{registrationCost}" />
+	                         </div>
+	                         <div class="col-12 col-lg-6 justify-content-center mx-auto">
+	                             <label class="col-12 p-0" for="comments">Commentaire</label>
+	                             <textarea class="mx-auto col-12 textArea p-2" rows="6" cols="40" name="comments" th:field="*{comments}"></textarea>
+	                         </div>
+	                     </div>
+	                     <input type="submit" class="btn btnCustom mx-auto my-3" value="Sauvegarder les changements">
+	                     <input type="hidden" th:value="${registration.id}" name="registrationId">
+	                 </form>
+	                </div>
+	            </div>
+	           </div>
+	
+	             <div class="card">
+	                <div class="card-header" id="headingGame">
+	                    <h2 class="mb-0">
+	                        <a href="#collapseGame" class="btn btn-link" data-toggle="collapse" aria-expanded="false" aria-controls="collapseGame">
+	                            Liste des jeux renseignés pour l'évènement
+	                        </a>
+	                    </h2>
+	                </div>
+	                <div id="collapseGame" class="collapse show" aria-labelledby="headingGame" data-parent="#accordionUpdateRegistration">
+	                    <div class="card-body">
+	                    	<div class="card-body row justify-content-center">
+	                      <div class="card-body row justify-content-around">
+	                          <div class="card col-5 col-sm-4 col-md-3 col-lg-3 gameCard p-0 mx-1 my-1" th:each="game : ${registration.games}">
+	                              <div class="d-flex justify-content-center align-items-center p-1 p-sm-3 gamePictureContainer">
+	                                  <img th:if="${game.picture !='' AND game.picture !=null}" th:src="|..${game.picture}|" alt="image du jeu">
+	                                  <p th:unless="${game.picture !='' AND game.picture !=null}">Aucune image renseignée</p>
+	                              </div>
+	                              <div class="card-body gameCardText p-2 m-0">
+	                                  <p class="card-text col-12" th:text="${game.name}"></p>
+	                              </div>
+	                              <form method="post" th:action="@{/deleteRegistrationGame}" class="row justify-content-center my-2">
+	                                  <button type="submit" class="svg-btn col-3" onclick="return confirm('Etes-vous sûr de vouloir supprimer ce jeu ? Celui-ci sera définitivement effacé de l\'inscription!');">
+	                                      <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+	                                          <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+	                                      </svg>
+	                                  </button>
+	                                  <input type="hidden" th:value="${game.id}" name="gameRegistrationId">
+	                                  <input type="hidden" th:value="${registration.id}" name="registrationId">
+	                                  <input type="hidden" value="true" name="adminRequest">
+	                              </form>
+	                          </div>
+	                      </div>
+	                  </div>                                
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="card">
+	                <div class="card-header" id="headingAgent">
+	                    <h2 class="mb-0">
+	                        <a href="#collapseAgent" class="btn btn-link" data-toggle="collapse" aria-expanded="false" aria-controls="collapseAgent">
+	                            Liste des collaborateurs inscrits
+	                        </a>
+	                    </h2>
+	                </div>
+	                <div id="collapseAgent" class="collapse show" aria-labelledby="headingAgent" data-parent="#accordionUpdateRegistration">
+	                    <div class="card-body overflow-auto">
+	                    	<table class="table">
+                               <thead class="thead-dark">
+                                   <tr>
+                                       <th scope="col">Prénom</th>
+                                       <th scope="col">Nom</th>
+                                       <th scope="col">Téléphone</th>
+                                       <th scope="col">Email</th>
+                                       <th scope="col"></th>
+                                   </tr>
+                               </thead>
+                               <tbody>
+                                   <tr th:each="agent : ${agents}">
+                                       <th th:text="${agent.firstname}"></th>
+                                       <td th:text="${agent.lastname}"></td>
+                                       <td th:text="${agent.phone}"></td>
+                                       <td th:text="${agent.email}"></td>
+                                       <td class="d-flex justify-content-end align-items-center">
+                                           <form method="get" th:action="@{/admin/editerCollaborateurEditeur}" class="m-0 p-0">
+					                          <input type="hidden" th:value="${registration.id}" name="registrationId">
+					                          <input type="hidden" th:value="${agent.id}" name="agentRegistrationId">
+					                          <input type="hidden" value="true" name="adminRequest">
+                                               <button class="svg-btn" type="submit" data-toggle="collapse" data-target="#collapseUpdateEvent" aria-expanded="false" aria-controls="collapseUpdateEvent">
+                                                   <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                       <path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path>
+                                                   </svg>
+                                               </button>
+                                           </form>
+                                           <form method="post" th:action="@{/deleteRegistrationAgent}">
+					                          <input type="hidden" th:value="${registration.id}" name="registrationId">
+					                          <input type="hidden" th:value="${agent.id}" name="agentRegistrationId">
+					                          <input type="hidden" value="true" name="adminRequest">
+                                               <button type="submit" class="btn" onclick="return confirm('Etes-vous sûr de vouloir supprimer cet animateur ?');">
+                                                   <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                       <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+                                                   </svg>
+                                               </button>
+                                           </form>
+                                       </td>
+                                   </tr>
+                               </tbody>
+                           </table>
+                           <div id="selectedAgent" th:if="${selectedAgent != null or selectedAgent == 'none'}" th:object="${selectedAgent}">
+                           	   <hr class="mt-5"/>
+	                           <h3 class="mt-2 mb-3" th:text="|Modification des informations de *{firstname} *{lastname}|"></h3>
+								<form method="post" class="card-header row bg-dark customCardHeader justify-content-around mx-auto" th:action="@{/saveModifiedEditorAgent}" >
+									<input type="text" class="col-2 my-auto" th:field="*{firstname}">
+									<input type="text" class="col-2 my-auto" th:field="*{lastname}">
+									<input type="text" class="col-2 my-auto" th:field="*{phone}">
+									<input type="text" class="col-2 my-auto" th:field="*{email}">
+									<div class="col-4 row justify-content-end">
+										<input type="submit" class="btn btnCustom mx-1 my-1" value="Valider">
+			                        </div>	
+			                        <input type="hidden" th:value="${registrationId}" name="registrationId">
+									<input type="hidden" th:value="${selectedAgent.id}" name="agentId">
+								</form>
+                           </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+        </section>
+    </div>
+    <div th:replace="toasts :: toats"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script type="text/javascript" src="../JS/adminHome.js"></script>
+<script type="text/javascript" src="../JS/main.js"></script>
+
+</html>

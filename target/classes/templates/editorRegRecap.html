@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="../CSS/subscribeEditorModification.css">
+	</head>
+	<div class="container containerStyle customCard col-11 col-lg-7 editorRegRecap" th:each="registration : ${registrations}" th:fragment="regRecap :: editorRegRecap">
+		<div class="col-sm-12 p-0">
+			<div class="card">
+				<div class="card-header">
+					<h3 th:text="|Récapitulatif inscription évènement :	${registration.event.name}|"></h3>	
+				</div>
+				<div class="card-body p-2 p-md-3">
+					<h4 class="card-title pl-1 mt-2" th:text="|Demande d'inscription effectuée le ${#dates.format(registration.subscriptionDate, 'dd/MM/yyyy')}|"></h4>
+					<p class="row text-center justify-content-center my-4">
+						<span class="badge badge-pill badge-warning d-inline-flex align-items-center justify-content-center yellowBadge" th:if="${registration.state} == 'pending'">EN ATTENTE</span>
+						<span class="badge badge-pill badge-warning d-inline-flex align-items-center justify-content-center yellowBadge" th:if="${registration.state} == 'canceled'">ANNULATION DEMAND&Eacute;E</span>
+						<span class="badge badge-pill badge-success d-inline-flex align-items-center justify-content-center" th:if="${registration.state} == 'validated'">VALID&Eacute;E</span> 
+						<span class="badge badge-pill badge-danger d-inline-flex align-items-center justify-content-center" th:if="${registration.state} == 'rejected'">REFUS&Eacute;E</span>
+					</p>
+					<fieldset class="border p-2 p-sm-3 text-left" th:unless="${registration.state} == 'canceled'">
+						<legend class="w-auto px-1">Évènement</legend>
+						<h5 th:text="|${registration.event.name} ouvre ses portes du ${#dates.format(registration.event.eventBeginningDate, 'dd/MM/yyyy')} au ${#dates.format(registration.event.eventEndingDate, 'dd/MM/yyyy')}|"></h5>
+						<p th:text="${registration.event.description}"></p>
+					</fieldset>
+					<fieldset class="border p-2 p-sm-3 text-left my-3" th:unless="${registration.state} == 'canceled'">
+						<legend class="w-auto px-1">Récapitulatif de vos demandes</legend>
+						<div class="row align-items-center">
+							<div class="col-12 col-sm-10">
+								<p class="d-flex justify-content-between">Nombre de tables demandées<span class="badge badge-pill badge-secondary d-inline-flex align-items-center text-center justify-content-center badgeDetails" th:text="${registration.tablesQuantity}"></span></p>
+								<p class="d-flex justify-content-between">Vous avez besoin d'un raccord au réseau éléctrique<span class="badge badge-pill badge-secondary d-inline-flex align-items-center justify-content-center badgeDetails " th:if="${registration.electricalSupplyNeed}">OUI</span>
+																						<span class="badge badge-pill badge-secondary d-inline-flex align-items-center justify-content-center badgeDetails " th:unless="${registration.electricalSupplyNeed}">NON</span></p>
+								<p class="d-flex justify-content-between">Vous souhaitez vendre des produits<span class="badge badge-pill badge-secondary d-inline-flex align-items-center justify-content-center badgeDetails " th:if="${registration.saleOption}">OUI</span>
+																							<span class="badge badge-pill badge-secondary d-inline-flex align-items-center justify-content-center badgeDetails " th:unless="${registration.saleOption}">NON</span></p>
+								<p class="d-flex justify-content-between">Des représentants de votre entreprise seront présents<span class="badge badge-pill badge-secondary d-inline-flex align-items-center justify-content-center badgeDetails" th:if="${registration.agentProvided}">OUI</span>
+																											   <span class="badge badge-pill badge-secondary d-inline-flex align-items-center justify-content-center badgeDetails" th:unless="${registration.agentProvided}">NON</span></p>
+								<p class="d-flex justify-content-between">Vous avez besoin de bénévoles pour l'animation de vos jeux<span class="badge badge-pill badge-secondary d-inline-flex align-items-center justify-content-center badgeDetails" th:if="${registration.volunteersNeed}">OUI</span>
+																								<span class="badge badge-pill badge-secondary d-inline-flex align-items-center justify-content-center badgeDetails" th:unless="${registration.volunteersNeed}">NON</span></p>
+							</div>
+						</div>  
+					</fieldset>
+					<fieldset class="border my-3 p-1 p-2 p-sm-3 text-left" th:unless="${registration.state} == 'canceled'">
+						<legend class="w-auto px-1">Vos jeux inscrits</legend>
+						<div class="fluid-container">
+							<div class="row justify-content-center">										
+								 <div class="card col-5 col-sm-4 col-md-3 col-lg-3 gameCard p-0 mx-1 my-1" th:each="game : ${registration.games}" >
+								 	<div class="d-flex justify-content-center align-items-center p-1 p-sm-3 gamePictureContainer">
+										 <img th:if="${game.picture !='' AND game.picture !=null}" th:src="|${game.picture}|" alt="image du jeu">
+										 <img th:unless="${game.picture !='' AND game.picture !=null}" th:src="@{${connectedUser.getProfilePicture()}}" alt="image du jeu">								
+								 	</div>										
+									<div class="card-body gameCardText p-2 m-0">
+										<p class="card-text" th:text="${game.name}"></p> 
+									</div>
+								</div>
+							</div>										
+							<div class="row regGamesMsg">
+								<p class="col-12" th:text="|Vous avez demandé ${registration.tablesQuantity} tables, vous devez inscrire ${registration.tablesQuantity} jeux.|"></p>											
+							</div>	 
+						</div> 
+					</fieldset>
+					<fieldset class="border p-2 p-sm-3 text-left" th:unless="${registration.state} == 'canceled'">
+						<legend class="w-auto px-1 mb-3">Vos collaborateurs</legend>
+						<div class="row align-items-center">
+							<div class="col-sm-12">
+								<p th:if="${registration.agentProvided} and ${#lists.isEmpty(registration.agents)}">Vous avez indiqué que vos collaborateurs participeront à l'évènement. Merci de compléter leur inscription.</p>		
+								<p th:unless="${registration.agentProvided}">Aucun collaborateur de votre entreprise ne sera présent.</p>
+								<div th:if="${not #lists.isEmpty(registration.agents)}">
+									<table class="table table-striped table-bordered table-responsive d-none d-lg-block">
+										<thead>
+											<tr>
+												<th>Nom</th>
+												<th>Prénom</th>
+												<th>Téléphone</th>
+												<th>Mail</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="agentRegistration : ${registration.agents}">
+												<td th:text="${agentRegistration.firstname}"></td>
+												<td th:text="${agentRegistration.lastname}"></td>
+												<td th:text="${agentRegistration.phone}"> </td>
+												<td th:text="${agentRegistration.email}"></td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="containerStyle col-11 d-block d-lg-none" th:each="agentRegistration : ${registration.agents}">
+										<div class="card">
+											<div class="row align-items-center card-header card-header-custom p-1 mx-auto" th:action="@{/deleteRegistrationAgent}" method="POST" >
+												<h3 class="col-10 pl-2 p-0" th:text="|${agentRegistration.lastname} ${agentRegistration.firstname}|"></h3>
+						                    </div>	
+										</div>
+										<div class="card-body">
+											<p class="card-text" th:text="|Email : ${agentRegistration.email}|"></p>
+											<p class="card-text" th:text="|Téléphone : ${agentRegistration.phone}|"></p>
+										</div>					
+									</div>
+								</div>
+							</div>
+						</div>  
+					</fieldset>
+					<fieldset class="border p-2 p-sm-3 my-3 text-left" th:unless="${registration.state} == 'canceled'">
+						<legend class="w-auto px-1">Coût de votre participation</legend>
+						<div class="row align-items-center">
+							<div class="col-sm-12">
+							<p th:text="|Le montant de votre inscription est de : ${#numbers.formatInteger(registration.registrationCost,2,'COMMA')} euros|"></p>
+							</div>
+						</div>  
+					</fieldset>
+					<fieldset class="border p-2 p-sm-3 text-left" th:unless="${registration.state} == 'canceled'">
+						<legend class="w-auto">Vos commentaires</legend>
+						<div class="row align-items-center">
+							<div class="col-sm-12">
+							<p th:text="${registration.comments}"></p>
+							</div>
+						</div>  
+					</fieldset>
+					<form class="d-flex justify-content-center justify-content-md-end mt-4"  method="get" th:action="@{/modificationInscriptionEvenementEditeur}">
+						<button th:if="${registration.state} != 'validated'" type="submit" class=" btn btn-primary subscribeModifBtn" name="submitBtn">Modifier ma demande</button>
+						<a th:if="${registration.state} == 'validated'"  class=" btn btn-primary subscribeModifBtn" name="submitBtn" href="javascript: alert('Votre inscription a été validée, merci de prendre contact avec l\'administrateur du site afin de modifier votre demande.');">Modifier ma demande</a>
+						<input type="hidden" id="regitration" name="registrationId" th:value="${registration.id}">
+					</form>
+					<form class="d-flex justify-content-center justify-content-md-end my-3"  method="post" th:action="@{/cancelEditorRegistration}">
+						<button th:if="${registration.state} != 'validated'" type="submit" class=" btn btn-primary subscribeModifBtn" onclick="return confirm('Etes-vous sûr de vouloir annuler votre inscription ?');" >Annuler ma demande</button>
+						<a th:if="${registration.state} == 'validated' AND ${registration.state} != 'pending' "  class=" btn btn-primary subscribeModifBtn" name="submitBtn" href="javascript: alert('Votre inscription a été validée, merci de prendre contact avec l\'administrateur du site afin de modifier votre demande.');">Annuler ma demande</a>
+						<input type="hidden" id="registration" name="registrationId" th:value="${registration.id}">
+					</form>						
+				</div>
+			</div>
+		</div>
+	</div>
+</html>

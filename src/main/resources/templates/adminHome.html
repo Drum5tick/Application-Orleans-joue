@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Acme&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Acme|Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../CSS/adminHome.css">
+  <title>Accueil Administrateur</title>
+</head>
+	<body>
+  <div id="wrapper">
+	  <aside th:replace="adminSidebar.html :: sidebar"></aside>
+	  <div th:replace="adminSidebar.html :: navbar"></div>
+	  <section class="fluid-container pt-3" id="content-wrapper"> 	
+	  	<h2 class="pl-0 pl-sm-5 mt-3 mb-4">Tableau de bord</h2>	
+	  	<hr class="col-11 col-sm-7 mt-4 mb-2 mb-sm-5"/>  	
+        <h3 th:if="${activeEvents.size() !=0}" class="col-12 col-sm-10 my-4 text-sm-left title mx-auto p-0">Résumé des inscriptions</h3>
+        <h3 th:unless="${activeEvents.size() !=0}" class="col-12 col-sm-10 my-4 text-sm-left title mx-auto p-0">Aucun évènement en cours</h3>
+
+      	<div class="container containerStyle col-12 col-lg-10 mb-2 p-0" th:each="event : ${activeEvents}" th:with="index=${event.id}-1">
+            	<div class="card mb-5">
+                	<div class="card-header">
+                		<div class="row">
+	                    	<h5 class="col-9 my-auto ml-3 py-3" th:text="${event.name}">Evènement</h5>
+                    	</div>
+                    </div>
+                    <div class="card-body row justify-content-around">
+	                    	<div class="col-12 d-flex justify-content-between flex-wrap mb-3">
+		                    	<div class="border col-12 col-md-3 p-3 my-2 my-lg-0">
+		                    		<h4 class="mb-4">Éditeurs</h4>
+		                    		<div class="d-flex justify-content-between">
+			                    		<p class="largerFont">Inscriptions validées</p>
+			                    		<p class="text-center largerFont p-0" th:text="${editorValidatedRegs[index]}"></p>
+		                    		</div> 
+		                    		<div class="d-flex justify-content-between">
+			                    		<p class="largerFont">Inscriptions en attente</p>
+			                    		<p class="text-center largerFont p-0 text-danger" th:text="${editorPendingRegs[index]}"></p>
+		                    		</div>                  		
+		                    	</div>
+		                    	<div class="border col-12 col-md-3 p-3 my-2 my-lg-0">
+		                    		<h4 class="mb-4">Boutiques</h4>
+		                    		<div class="d-flex justify-content-between">
+			                    		<p class="largerFont">Inscriptions validées</p>
+			                    		<p class="text-center largerFont p-0" th:text="${shopValidatedRegs[index]}"></p>
+		                    		</div>
+		                    		<div class="d-flex justify-content-between">
+			                    		<p class="argerFont">Inscriptions en attente</p>
+			                    		<p class="text-center largerFont p-0 text-danger" th:text="${shopPendingRegs[index]}"></p>
+		                    		</div>
+		                    	</div>
+		                    	<div class="border col-12 col-md-3 p-3 my-2 my-lg-0">
+		                    		<h4 class="mb-4">Protozone</h4>
+		                    		<div class="d-flex justify-content-between">
+			                    		<p class="largerFont">Inscriptions validées</p>
+			                    		<p class="text-center largerFont p-0" th:text="${protozoneValidatedRegs[index]}"></p>
+		                    		</div>
+		                    		<div class="d-flex justify-content-between">
+			                    		<p class="argerFont">Inscriptions en attente</p>
+			                    		<p class="text-center largerFont p-0 text-danger" th:text="${protozonePendingRegs[index]}"></p>
+		                    		</div>
+		                    	</div>
+		                    	<div class="border col-12 col-md-2 p-3 my-2 my-lg-0">
+		                    		<h4 class="mb-4">Bénévoles</h4>
+		                    		<div class="d-flex justify-content-between">
+			                    		<p class="largerFont">Nombre d'inscrits</p>
+			                    		<p class="text-center largerFont p-0" th:text="${volunteerRegs[index]}"></p>
+		                    		</div>
+		                    	</div>
+		                    </div>
+                    	<div class="col-12 d-flex justify-content-between flex-wrap">
+	                    	<div class="col-12 col-md-4 border p-3 my-lg-0">
+	                    		<h4 class="mb-4">Informations générales</h4>
+		                    	<p class="d-flex justify-content-between largerFont2">Total de tables pour l'évènement<span class="largerFont2" th:text="${event.tables}"></span></p> 
+		                    	<p class="d-flex justify-content-between largerFont2">Nombre de tables max. par éditeur<span class="largerFont2" th:text="${event.maxTablesPerEditor}"></span></p> 
+		                    	<p class="d-flex justify-content-between largerFont2">Nombre de tables pour la protozone<span class="largerFont2" th:text="${event.protozoneTables}"></span></p>  
+		                    	<p class="d-flex justify-content-between largerFont2">Total tables réservées<span th:if="${reservedTables[index]} > ${event.tables}" class="redSpan largerFont2" th:text="${reservedTables[index]}"></span>
+		                    											  									<span th:unless="${reservedTables[index]} > ${event.tables}" class="greenSpan largerFont2" th:text="${reservedTables[index]}"></span></p>
+		                 		<p class="d-flex justify-content-between largerFont2">Total tables en attente<span th:if="${pendindTables[index]} > ${event.tables}" class="redSpan largerFont2" th:text="${pendindTables[index]}"></span>
+		                    											  									<span th:unless="${pendindTables[index]} > ${event.tables}" class="text-warning largerFont2" th:text="${pendindTables[index]}"></span></p>
+		                    	<p class="d-flex justify-content-between largerFont2">Nombre de tables encore disponibles<span class="largerFont2 text-info" th:text="${event.tables - reservedTables[index]}"></span></p> 
+		                    	<p class="d-flex justify-content-between largerFont2">Prix par table<span class="largerFont2" th:text="|${#numbers.formatDecimal(event.pricePerTable, 0, 'COMMA', 2, 'POINT')} €|"></span></p>
+		                    	<p class="d-flex justify-content-between largerFont2">Prix option vente éditeur<span class="largerFont2" th:text="|${#numbers.formatDecimal(event.saleOptionPrice, 0, 'COMMA', 2, 'POINT')} €|"></span></p>
+		                    	<p class="d-flex justify-content-between largerFont2">Prix d'inscription boutique<span class="largerFont2" th:text="|${#numbers.formatDecimal(event.shopPrice, 0, 'COMMA', 2, 'POINT')} €|"></span></p>
+		                    	<p class="d-flex justify-content-between largerFont2">Nombre de tables achetées pour 1 gratuite<span class="largerFont2" th:text="${event.discount}"></span></p>                 
+		                   	</div>
+		                   	<div class="col-12 col-md-4 border p-3 my-lg-0 mt-3 mt-sm-0">
+		                   		<h4 class="mb-4">Dates d'inscription</h4>
+		                   		<h5>Editeurs/Protozone</h5>
+		                   		<p class="d-flex justify-content-between largerFont2 mb-2">Ouverture<span class="largerFont2" th:text="${#dates.format(event.editorsRegistrationBeginDate, 'dd/MM/yyyy')}"></span></p>
+		                    	<p class="d-flex justify-content-between largerFont2">Fermeture<span class="largerFont2" th:text="${#dates.format(event.editorsRegistrationEndDate, 'dd/MM/yyyy')}"></span></p> 
+		                    	<h5 class="mt-4">Boutiques</h5>
+		                    	<p class="d-flex justify-content-between largerFont2 mb-2">Ouverture<span class="largerFont2" th:text="${#dates.format(event.shopsRegistrationBeginDate, 'dd/MM/yyyy')}"></span></p>
+		                    	<p class="d-flex justify-content-between largerFont2">Fermeture<span class="largerFont2" th:text="${#dates.format(event.shopsRegistrationEndDate, 'dd/MM/yyyy')}"></span></p> 
+		                    	<h5 class="mt-4">Bénévoles</h5>
+		                    	<p class="d-flex justify-content-between largerFont2 mb-2">Ouverture<span class="largerFont2" th:text="${#dates.format(event.volunteersRegistrationBeginDate, 'dd/MM/yyyy')}"></span></p>
+		                    	<p class="d-flex justify-content-between largerFont2">Fermeture<span class="largerFont2" th:text="${#dates.format(event.volunteersRegistrationEndDate, 'dd/MM/yyyy')}"></span></p>
+		                   	</div>
+		                   	<div class="col-12 col-md-3 border p-3 my-lg-0 mt-3 mt-sm-0">
+		                    	<h4 class="mb-4">Taches bénévoles</h4>  
+		                    	<p class="d-flex justify-content-between largerFont2" th:each="eventTask : ${event.eventTasks}" th:text="${eventTask?.task?.name}"></p>                 
+		                   	</div>
+                    	</div>
+	                   	<div class="col-12 mt-2 p-3 ">
+		                   	<h4 class="mb-4">Description de l'évènement</h4>
+		                   	<p class="col-12 largerFont2" th:text="${event.description}"></p>  
+	                   	</div>
+                   	</div>
+				</div>
+			</div>
+    	</section>
+	</div>	  
+</body>
+	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="../JS/adminHome.js"></script>
+</html>
+

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	    <link href="https://fonts.googleapis.com/css?family=Acme&display=swap" rel="stylesheet">
+	    <link href="https://fonts.googleapis.com/css?family=Acme|Roboto&display=swap" rel="stylesheet">
+ 	    <link rel="stylesheet" href="../CSS/style.css">
+ 	    <link rel="stylesheet" href="../CSS/login.css">
+		<link rel="stylesheet" href="../CSS/userRegPage.css">
+	    <link rel="stylesheet" href="../CSS/toast.css">
+	    <title>Création de compte utilisateur Orléans joue</title>  
+	    <script>
+	    	var toastMsg = "[[${toastMsg}]]";
+		</script>
+	</head>
+	<body class="container fluid-container">
+		<section class="row justify-content-center mt-3 mt-lg-5 titleSection">
+			<h1 class="col-6 text-center mb-lg-5">Inscription Utilisateur</h1>
+		</section>
+		<form class="containerStyle col-11 col-md-9 col-lg-8 loginContainer" method="post" th:action="@{/ajoutUtilisateur}" th:object="${user}">
+			<div class="row justify-content-center formHeader">
+				<img class="loginLogo my-3" src="../pictures/logo_transparent2.png" alt="Logo Orléans Joue">
+			</div>
+			<div class="row justify-content-center mb-4">
+				<h2 class="col-10 text-center regPageh2">Merci de saisir vos informations de profil</h2>
+			</div>
+			<div class="row justify-content-center mt-2">  
+				<label for="firstname" class="col-10 col-lg-3 mt-2">Prénom <span class="requiredField">*</span></label>
+				<input class="col-9 col-lg-6 inputBars" type="text" th:field="*{firstname}" required>
+			</div>
+			<div class="row justify-content-center mt-3">  
+				<label for="lastname" class="col-10 col-lg-3 mt-2">Nom <span class="requiredField">*</span></label>
+				<input class="col-9 col-lg-6 inputBars" type="text" th:field="*{lastname}" required>
+			</div>
+			<div class="row justify-content-center mt-3">  
+				<label for="email" class="col-10 col-lg-3 mt-2">Adresse email <span class="requiredField">*</span></label>
+				<input class="col-9 col-lg-6 inputBars" type="email" th:field="*{email}" placeholder="eric.durand@mail.com" required>
+			</div>
+			<div class="row justify-content-center mt-3">
+				<label for="password" class="col-10 col-lg-3 mt-2">Mot de passe <span class="requiredField">*</span></label>
+				<input class="col-9 col-lg-6 inputBars" type="password" pattern=".{8,}" title="8 charactères minimum" th:field="*{password}" required>
+			</div>
+			<p class="col-lg-4 col-5 text-center ml-auto mr-4 mt-2 requiredFieldInfo"><span class="requiredField">*</span> Champs obligatoires</p>
+			<div class="row justify-content-center mt-3 mb-2">
+				<input class="col-5 col-lg-3 btn btn-primary" type="submit" value="S'inscrire">				
+			</div>
+			<div class="row justify-content-center mb-4">				
+				<a class="col-5 col-lg-3 btn btn-primary backBtn" href="/typeUtilisateur">Retour</a>
+				<input type="hidden" name="profilePicture" value="pictures/default_avatar.jpg">
+				<input type="hidden" name="user_role" th:value=${regUserRole}>
+			</div>					
+		</form>
+		<div th:replace="toasts :: toats"></div>
+	</body>
+	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script	src="JS/main.js"></script>
+</html>

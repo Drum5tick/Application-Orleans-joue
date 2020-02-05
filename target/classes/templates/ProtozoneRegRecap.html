@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<div class="container containerStyle col-11 col-lg-7 customCard" th:each="protozoneRegistration : ${protozoneReg}" th:fragment="regRecap :: protozoneRegRecap">
+		<div class="col-sm-12 p-0">
+			<div class="card">
+				<div class="card-header">
+					<h3 th:text="|Récapitulatif inscription évènement :	${protozoneRegistration.event.name}|"></h3>	
+				</div>
+				<div class="card-body p-2 p-md-3">
+					<h4 class="card-title mt-2" th:text="|Demande d'inscription effectuée le ${#dates.format(protozoneRegistration.subscriptionDate, 'dd/MM/yyyy')}|"></h4>
+					<p class="row text-center justify-content-center mb-1">
+						<span class="badge badge-pill badge-warning d-inline-flex align-items-center justify-content-center yellowBadge my-3" th:if="${protozoneRegistration.state} == 'pending'">EN ATTENTE</span>
+						<span class="badge badge-pill badge-warning d-inline-flex align-items-center justify-content-center yellowBadge my-3" th:if="${protozoneRegistration.state} == 'canceled'">ANNULATION DEMAND&Eacute;E</span>
+						<span class="badge badge-pill badge-success d-inline-flex align-items-center justify-content-center my-3" th:if="${protozoneRegistration.state} == 'validated'">VALIDÉE</span> 
+						<span class="badge badge-pill badge-danger d-inline-flex align-items-center justify-content-center my-3" th:if="${protozoneRegistration.state} == 'rejected'">REFUSÉE</span>
+					</p>
+					<fieldset class="border p-2 p-sm-3 text-left" th:unless="${protozoneRegistration.state} == 'canceled'">
+						<legend class="w-auto px-1">Évènement</legend>
+						<h5 th:text="|${protozoneRegistration.event.name} ouvre ses portes du ${#dates.format(protozoneRegistration.event.eventBeginningDate, 'dd/MM/yyyy')} au ${#dates.format(protozoneRegistration.event.eventEndingDate, 'dd/MM/yyyy')}|"></h5>
+						<p th:text="${protozoneRegistration.event.description}"></p>
+					</fieldset>
+					<fieldset class="border p-2 p-sm-3 text-left my-3" th:unless="${protozoneRegistration.state} == 'canceled'">
+						<legend class="w-auto px-1">Présentation de votre prototype</legend>
+						<div class="row align-items-center px-2">
+							<div class="col-sm-12">
+							<p th:text="${protozoneRegistration.comments}"></p>
+							</div>
+						</div>
+					</fieldset>  
+					<form th:unless="${protozoneRegistration.state} == 'canceled'" class="d-flex justify-content-center justify-content-md-end mt-4"  method="post" th:action="@{/modificationInscriptionEvenementProtozone}">
+						<button th:if="${protozoneRegistration.state} != 'validated'" type="submit" class=" btn btn-primary subscribeModifBtn" name="submitBtn">Modifier ma demande</button>
+						<a th:if="${protozoneRegistration.state} == 'validated'"  class=" btn btn-primary subscribeModifBtn" name="submitBtn" href="javascript: alert('Votre inscription a été validée, merci de prendre contact avec l\'administrateur du site afin de modifier votre demande.');">Modifier ma demande</a>
+						<input type="hidden" id="regitration" name="registrationId" th:value="${protozoneRegistration.id}">
+					</form>
+					<form th:unless="${protozoneRegistration.state} == 'canceled'" class="d-flex justify-content-center justify-content-md-end my-3"  method="post" th:action="@{/cancelProtozoneRegistration}">
+						<button th:if="${protozoneRegistration.state} != 'validated'" type="submit" class=" btn btn-primary subscribeModifBtn" onclick="return confirm('Etes-vous sûr de vouloir annuler votre inscription ?');" >Annuler ma demande</button>
+						<a th:if="${protozoneRegistration.state} == 'validated'"  class=" btn btn-primary subscribeModifBtn" name="submitBtn" href="javascript: alert('Votre inscription a été validée, merci de prendre contact avec l\'administrateur du site afin de modifier votre demande.');">Annuler ma demande</a>
+						<input type="hidden" id="registration" name="protozoneRegistrationId" th:value="${protozoneRegistration.id}">
+					</form>	
+				</div>
+			</div>
+		</div>
+	</div>
+</html>

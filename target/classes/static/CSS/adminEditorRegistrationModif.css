@@ -1,0 +1,41 @@
+
+
+.gameCard {
+	border:1px solid var(--darkGrey);
+	border-radius:0px;
+	background:white;
+	background-size: cover;
+	background-position: center;
+	min-height: 150px;
+}
+
+.gamePictureContainer {
+	height:150px;
+	width: auto;
+}
+
+.gamePictureContainer img {
+	height:auto;
+	max-height:100%;
+	width: auto;
+	max-width: 100%;
+}
+
+
+.gameCardText {
+	background: var(--darkGrey);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--drakGrey);
+    text-align: center;
+    justify-content:center;
+    color: white;
+}
+
+.customCardHeader {
+	color: white;
+}
+
+.textArea {
+	resize: none;
+}

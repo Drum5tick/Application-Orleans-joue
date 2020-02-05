@@ -1,0 +1,48 @@
+body{
+	background-color: #ec6d31;
+	background-image: url("../pictures/backgroundLogin.jpg");
+	background-size: inherit;
+	background-position: top;
+} 
+
+h1{
+	color:white;
+}
+
+h2{
+	color:black;
+}
+
+.titleSection{
+	height:5rem;	
+}
+
+
+.inputBars {
+	height: 2rem;
+	font-size: 1.2rem;
+}
+
+.loginh2 {
+	font-size: 1.8rem;
+}
+
+.loginContainer{
+	margin-top:10vh;	
+}
+
+.formHeader{
+	margin-top: -5rem;	
+}
+
+.loginLogo{
+	width:25%;
+	height:25%;
+}
+
+@media (max-width: 1024px) {  
+	
+	.signInLink {
+		font-size: 1.2rem;
+	}	
+}

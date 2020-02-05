@@ -1,0 +1,54 @@
+
+.userInfosCard {
+	width: 40%;	
+}
+
+.userInfosRow {
+	width: 96%;
+}
+
+.badgeUserInfos {
+	width: 25%;
+	background-color: var(--purple);	
+}
+
+.profilePictUserInfos {
+	width: auto;
+	height: 6rem;
+}
+
+.userAccountModifLink {
+	height: 2.5rem;
+}
+
+.yellowBadgeInfos {
+	color: black;
+	text-shadow: none;
+}
+
+.userAccountInfos fieldset div p:first-child {
+	color:var(--mediumGrey);
+
+}
+
+@media (max-width: 1024px) {
+	
+	.userInfosCard {
+		width: 75%;	
+	}
+	
+}
+
+
+@media (max-width: 767px) {
+	
+	.userInfosCard {
+		width: 96%;	
+	}
+	
+	.badgeUserInfos {
+		width: 50%;	
+	}
+}
+		
+}

@@ -1,0 +1,34 @@
+
+.accountModifTitle {
+	color: black;	
+}
+
+.profilePictVolunteer {
+	width: 80px;
+	height: 80px;
+}
+
+.profilePict {
+	width: 80px;
+	height: 80px;
+}
+
+.requiredStar {
+	color: red;
+}
+
+@media (max-width: 768px) {
+	
+	.accountModifTitle {
+		font-size: 1.8rem;	
+	}
+	
+	.inputBars {
+		height: 2.5rem;
+		font-size: 1.2rem;
+	}
+	
+	.fileBtn {
+		font-size: 1.2rem;
+	}
+}

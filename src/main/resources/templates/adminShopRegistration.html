@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Acme&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Acme|Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../CSS/adminHome.css">
+    <link rel="stylesheet" type="text/css" href="../../CSS/adminRegistrations.css">
+    <title></title>
+</head>
+
+<body>
+    <div id="wrapper">
+        <aside th:replace="adminSidebar.html :: sidebar"></aside>
+        <div th:replace="adminSidebar.html :: navbar"></div>
+        <section id="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="content-title mt-3">Gestion des inscriptions des boutiques</h2>
+                </div>
+            </div>
+            <hr class="mt-4" />
+            <div class="row mb-5 mb-sm-4">
+                <div th:if="${events.size() !=0}" class="col d-flex flex-column flex-sm-row align-items-sm-center align-items-start">
+                    <h3 class="my-2">État des inscriptions de l'évènement</h3>
+                    <div class="">
+                        <form th:action="@{/admin/submitAdminForShopRegistration}" class="col-12 d-flex align-items-center px-0 px-sm-3 flex-wrap flex-sm-nowrap" method="post">
+                            <select name="eventId" class="mr-3 my-2	 selectTitle">
+                                <option th:each="event: ${events}" th:value="${event.id}" th:text="${event.name}" th:selected="${lastEvent == event}"></option>
+                            </select>
+                            <button class="btn btnCustom my-2" type="submit">Valider</button>
+                        </form>
+                    </div>
+                </div>
+		         <div th:unless="${events.size() !=0}" class="col d-flex flex-column flex-sm-row align-items-sm-center align-items-start" >
+                    <h3 class="my-2">Aucun évènement en cours</h3>
+                </div> 
+            </div>
+		    <div th:if="${events.size() !=0}" class="row mr-0 mr-sm-4 mb-2">
+            	<div class="col-12 d-flex justify-content-start justify-content-lg-end">
+            		<div class="d-flex justify-content-center align-items-center">
+	            		<div class="bg-warning legendBadge"></div>
+	            		<small class="ml-1  my-0">en attente</small>
+            		</div>
+	            		<div class="d-flex ml-2 justify-content-center align-items-center">
+	            		<div class="bg-success ml-auto legendBadge"></div>
+            		<small class="ml-1 my-0">validée</small>
+            		</div>
+            		<div class="d-flex ml-2 justify-content-center align-items-center">
+	            		<div class="bg-danger ml-auto legendBadge" ></div>
+	            		<small class="ml-1 my-0">annulée par la boutique</small>
+            		</div>
+            	</div>
+            </div>
+            <div th:if="${events.size() !=0}" class="row">
+                <div class="col-12">
+                    <div class="accordion" id="accordionRegistrations">
+                        <div class="card">
+                            <div class="card-header d-flex px-0" id="headingOne">
+                                <h2 class="mb-0 col-12 px-3">
+                                    <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapsePendingRegistrations" aria-expanded="true" aria-controls="collapsePendingRegistrations">
+ 										<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                        <p class="my-0">Inscriptions en attente de validation</p>
+                                        <span class="badge badge-warning ml-auto my-0" th:text="${shopRegistrationPending.size()}"></span>
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapsePendingRegistrations" th:class="|collapse ${(toggleCard == 'PendingRegistrations')? 'show' : ''}|" aria-labelledby="headingPendingRegistrations" data-parent="#accordionRegistrations">
+                                <div class="card-body">
+									<div th:if="${shopRegistrationPending!= null and shopRegistrationPending.size()!=0}">
+										<!-- accordeon result -->
+                                        <div class="accordion" id="accordionResultPending">
+											<div th:each="registrationPending : ${shopRegistrationPending}" class="card">
+												<div class="card-header bg-dark" th:id="|heading${registrationPending.id}|">
+													<div class="pendingButton b-0 bg-dark" data-toggle="collapse" th:data-target="|#collapse${registrationPending.id}|" aria-expanded="true" th:aria-controls="|collapse${registrationPending.id}|">
+														<div class="d-flex flex-row justify-content-between">
+															<div class="d-flex">
+																<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="white" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                                                                                                        
+                                                            	<p class="text-light m-0" th:text="|${registrationPending.society.name}"></p>
+                                                            </div>
+                                                            <div class="d-flex flex-row justify-content-end">
+																<div class="d-flex align-items-center ml-2" th:if="${registrationPending.shopInvoice} != null">
+																	<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="euro-sign" class="svg-inline--fa fa-euro-sign fa-w-10 mr-1 mb-1" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+																		<path fill="white" d="M310.706 413.765c-1.314-6.63-7.835-10.872-14.424-9.369-10.692 2.439-27.422 5.413-45.426 5.413-56.763 0-101.929-34.79-121.461-85.449h113.689a12 12 0 0 0 11.708-9.369l6.373-28.36c1.686-7.502-4.019-14.631-11.708-14.631H115.22c-1.21-14.328-1.414-28.287.137-42.245H261.95a12 12 0 0 0 11.723-9.434l6.512-29.755c1.638-7.484-4.061-14.566-11.723-14.566H130.184c20.633-44.991 62.69-75.03 117.619-75.03 14.486 0 28.564 2.25 37.851 4.145 6.216 1.268 12.347-2.498 14.002-8.623l11.991-44.368c1.822-6.741-2.465-13.616-9.326-14.917C290.217 34.912 270.71 32 249.635 32 152.451 32 74.03 92.252 45.075 176H12c-6.627 0-12 5.373-12 12v29.755c0 6.627 5.373 12 12 12h21.569c-1.009 13.607-1.181 29.287-.181 42.245H12c-6.627 0-12 5.373-12 12v28.36c0 6.627 5.373 12 12 12h30.114C67.139 414.692 145.264 480 249.635 480c26.301 0 48.562-4.544 61.101-7.788 6.167-1.595 10.027-7.708 8.788-13.957l-8.818-44.49z"></path>
+																	</svg>
+																</div>	                                                                
+                                                                <div class="d-flex align-items-center ml-2">
+                                                                    <svg version="1.0" xmlns="http://www.w3.org/2000/svg" width="1280.000000pt" height="914.000000pt" viewBox="0 0 1280.000000 914.000000" class="mr-1">
+                                                                        <g transform="translate(0.000000,914.000000) scale(0.100000,-0.100000)" fill="white" stroke="none">
+                                                                            <path d="M7015 7934 c-680 -51 -2974 -221 -4765 -352 l-775 -57 1 -45 c1 -25
+																	22 -787 47 -1695 26 -907 51 -1816 58 -2020 l11 -370 36 -53 c20 -30 39 -55
+																	42 -57 3 -2 55 7 115 19 l110 22 -3 344 c-2 190 -7 687 -12 1105 -6 418 -10
+																	875 -9 1015 l0 255 54 -60 c29 -33 332 -373 673 -754 l620 -695 6 -160 c3 -89
+																	18 -943 32 -1899 l26 -1737 49 -108 c27 -59 53 -106 57 -106 4 1 72 10 152 19
+																	80 10 155 21 166 26 21 8 22 11 18 196 -8 356 -46 3665 -42 3669 5 4 270 36
+																	988 120 261 30 702 81 980 114 278 33 777 91 1110 129 333 39 620 73 638 76
+																	l32 6 -5 -183 c-2 -101 -7 -274 -10 -385 -4 -157 -3 -203 7 -210 7 -4 39 -20
+																	70 -34 l58 -26 112 15 c62 8 114 16 115 17 2 1 6 189 11 418 4 229 11 419 14
+																	423 7 6 312 43 1738 209 454 52 835 97 848 99 21 3 22 1 21 -78 0 -44 -26
+																	-810 -58 -1701 l-58 -1620 86 -87 86 -88 135 39 135 38 7 154 c7 138 105 2623
+																	143 3599 8 212 17 419 19 460 3 41 8 181 12 310 l7 235 -509 234 c-280 129
+																	-1008 466 -1619 748 -1026 475 -1113 513 -1160 512 -27 -1 -306 -21 -620 -45z" />
+                                                                        </g>
+                                                                    </svg>
+                                                                    <p class="text-light m-0" th:text="${registrationPending.tablesQuantity}"></p>
+                                                                </div>
+                                                                <div class="align-items-center ml-2 d-none d-sm-flex">
+                                                                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="calendar-alt" class="svg-inline--fa fa-calendar-alt fa-w-14 mr-1 mb-1" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                                        <path fill="white" d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"></path>
+                                                                    </svg>
+                                                                    <p class="text-light m-0" th:text="${#dates.format(registrationPending.subscriptionDate, 'dd/MM/yyyy')}"></p>										        											        	
+												        		</div>
+												        	</div>
+										        		</div>
+										        	</div>
+										    	</div>
+										    	<div th:id="|collapse${registrationPending.id}|" class="collapse" th:aria-labelledby="|heading${registrationPending.id}|" data-parent="#accordionResultPending">
+								            		<div class="card">
+								                    	<div class="card-body py-1">
+															<div class="col-12 d-flex justify-content-between align-items-stretch p-0 flex-wrap">
+																<div class="col-12 col-xl-4 border p-3 my-3">
+																	<h3 class="mb-3"> Informations générales</h3>
+																	<p class="d-flex justify-content-between">Nombre de tables demandées<span th:text="${registrationPending.tablesQuantity}"></span></p>  
+																	<p class="d-flex justify-content-between">Raccordement électrique<span th:text="${registrationPending.electricalSupplyNeed} ? 'oui' : 'non'"></span></p>
+																	<p class="d-flex justify-content-between">Collaborateurs présents<span th:text="${registrationPending.agentProvided} ? 'oui' : 'non'"></span></p>
+																	<p class="d-flex justify-content-between">Nombre de collaborateurs renseignés<span th:text="${#lists.size(registrationPending.agents)}"></span></p>             
+																</div>
+																   <div class="col-12 col-xl-4 border p-3 my-3">
+																	   <h3 class="mb-3"> Commentaire de la boutique</h3>
+																	   <p class="d-flex justify-content-between" th:if="${registrationPending.comments}!=null and ${registrationPending.comments}!=''" th:text="${registrationPending.comments}"></p>
+																	   <p class="d-flex justify-content-between text-danger" th:unless="${registrationPending.comments}!=null and ${registrationPending.comments}!=''">Aucun commentaire</p>
+																	</div>								                   	
+																<div class="col-12 col-xl-3 border p-3 my-3">
+																	<h3 class="mb-3"> Cout de l'inscription</h3>
+																	<p class="d-flex justify-content-between">Montant total<span th:text="|${registrationPending.registrationCost} €|"></span></p>
+																	   <p class="d-flex justify-content-between" th:if="${registrationPending.shopInvoice == null}">Etat de la facture<span>non générée</span></p>
+																	   <p class="d-flex justify-content-between" th:unless="${registrationPending.shopInvoice == null}">Etat de la facture<span>éditée</span></p>										                   		
+																	   <p class="d-flex justify-content-between" th:if="${registrationPending.shopInvoice != null}">N°facture<span th:text="${registrationPending.shopInvoice.id}"></span></p>
+																	   <form method="get" th:action="@{/admin/factureShop}" class="mx-1 my-1">
+																		<input type="hidden" name="shopRegId" th:value="${registrationPending.id}">
+																		<button class="btn btnCustom" type="submit" data-toggle="collapse" data-target="#collapseUpdateEvent" aria-expanded="false" aria-controls="collapseUpdateEvent" th:if="${registrationPending.shopInvoice == null}">
+																		Generer la facture
+																		</button>
+																	</form>						      
+																	   <form th:action="@{/admin/downloadInvoiceShop}" method="post">
+																		   <input type="hidden" name="invoiceId" th:value="${registrationPending.shopInvoice.id}" th:if="${registrationPending.shopInvoice != null}">
+																		   <button type="submit" class="btn btnCustom" th:if="${registrationPending.shopInvoice != null}">Télécharger la facture (pdf)</button>						      
+																	   </form>
+																	   <form th:action="@{/admin/deleteInvoiceShop}" method="post">
+																		   <input type="hidden" name="invoiceId" th:value="${registrationPending.shopInvoice.id}" th:if="${registrationPending.shopInvoice != null}">
+																		   <button type="submit" class="btn btn-danger mt-1 font-weight-bold" th:if="${registrationPending.shopInvoice != null}" onclick="return confirm('Etes-vous sûrs de vouloir supprimer cette facture ? Celle-ci sera définitivement effacée de la base de donnée !');">Annuler la facture</button>						      
+																	   </form>
+																</div>
+															</div>					   
+									                    	<div class="col-12 col-lg-12 pb-4 pt-3 d-flex justify-content-center flex-wrap">
+ 									                    		<form method="post" th:action="@{/admin/editerInscriptionBoutique}">
+									                    			<input type="submit" class="btn btnCustom mx-1 my-1" value="Modifier">
+									                    			<input type="hidden" th:value="${registrationPending.id}" name="registrationId">
+									                    		</form> 
+								      							<form method="POST" th:action="@{/admin/validateShopRegistration}" class="mx-1 my-1">
+		                                                            <input type="hidden" name="shopRegId" th:value="${registrationPending.id}">
+		                                                            <input type="hidden" name="eventId" th:value="${registrationPending.event.id}">
+		                                                            <button class="btn btnCustom" type="submit">
+		                                                            Valider
+		                                                            </button>
+		                                                        </form>
+		                                                        <form method="POST" th:action="@{/admin/cancelShopRegistration}" class="mx-1 my-1">
+		                                                            <input type="hidden" name="shopRegId" th:value="${registrationPending.id}">
+		                                                            <input type="hidden" name="eventId" th:value="${registrationPending.event.id}">
+		                                                            <button class="btn btnCustom" type="submit">
+		                                                            Annuler
+		                                                            </button>
+		                                                        </form>
+		                                                        <form method="POST" th:action="@{/admin/deleteShopRegistration}" class="mx-1 my-1">
+		                                                            <input type="hidden" name="shopRegId" th:value="${registrationPending.id}">
+		                                                            <input type="hidden" name="eventId" th:value="${registrationPending.event.id}">
+		                                                            <button class="btn btnCustom" type="submit" onclick="return confirm('Etes-vous sûrs de vouloir supprimer cette inscription ? Elle sera définitivement effacée de la base de donnée !');">
+		                                                            Supprimer
+		                                                            </button>
+		                                                        </form>
+										                   	</div>
+														</div>
+													</div>
+										    	</div>
+										  	</div>						  
+										</div>			
+									</div>
+									<div th:if="${shopRegistrationPending == null or shopRegistrationPending.size() ==0}">
+										<p class="mt-3 ml-3 text-danger">Aucune demande d'inscription en attente</p>
+									</div>					
+								</div>
+						  	</div>
+				  		</div>
+					  	<div class="card">
+					    	<div class="card-header px-0" id="headingValidatedRegistrations">
+						      	<h2 class="mb-0 col-12 px-3">
+						        	<button class="btn btn-link collapsed d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseValidatedRegistrations" aria-expanded="false" aria-controls="collapseTwo">
+ 										<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+						          		<p class="my-0">Inscriptions validées</p>
+						          		<span class="badge badge-success ml-auto my-0" th:text="${shopRegistrationValidated.size()}"></span>
+						        	</button>
+						      	</h2>
+					    	</div>
+				    		<div id="collapseValidatedRegistrations" th:class="|collapse ${(toggleCard == 'ValidatedRegistrations')? 'show' : ''}|" aria-labelledby="headingValidatedRegistrations" data-parent="#accordionRegistrations">
+								<div class="card-body">
+									<div th:if="${shopRegistrationValidated!= null and shopRegistrationValidated.size()!=0}">
+										<!-- accordeon result -->
+										<div class="accordion" id="accordionResultValidated">
+											<div th:each="RegistrationValidated : ${shopRegistrationValidated}" class="card">
+												<div class="card-header bg-dark" th:id="|heading${RegistrationValidated.id}|">
+													<div class="pendingButton b-0 bg-dark" data-toggle="collapse" th:data-target="|#collapse${RegistrationValidated.id}|" aria-expanded="true" th:aria-controls="|collapse${RegistrationValidated.id}|">
+														<div class="d-flex flex-row justify-content-between">
+															<div class="d-flex">
+																<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="white" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                                            											        		
+											        			<p class="text-light m-0" th:text="|${RegistrationValidated.society.name}"></p>
+										        			</div>
+										        			<div class="d-flex flex-row justify-content-end">
+																<div class="d-flex align-items-center ml-2" th:if="${RegistrationValidated.shopInvoice} != null">
+																	<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="euro-sign" class="svg-inline--fa fa-euro-sign fa-w-10 mr-1 mb-1" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+																		<path fill="white" d="M310.706 413.765c-1.314-6.63-7.835-10.872-14.424-9.369-10.692 2.439-27.422 5.413-45.426 5.413-56.763 0-101.929-34.79-121.461-85.449h113.689a12 12 0 0 0 11.708-9.369l6.373-28.36c1.686-7.502-4.019-14.631-11.708-14.631H115.22c-1.21-14.328-1.414-28.287.137-42.245H261.95a12 12 0 0 0 11.723-9.434l6.512-29.755c1.638-7.484-4.061-14.566-11.723-14.566H130.184c20.633-44.991 62.69-75.03 117.619-75.03 14.486 0 28.564 2.25 37.851 4.145 6.216 1.268 12.347-2.498 14.002-8.623l11.991-44.368c1.822-6.741-2.465-13.616-9.326-14.917C290.217 34.912 270.71 32 249.635 32 152.451 32 74.03 92.252 45.075 176H12c-6.627 0-12 5.373-12 12v29.755c0 6.627 5.373 12 12 12h21.569c-1.009 13.607-1.181 29.287-.181 42.245H12c-6.627 0-12 5.373-12 12v28.36c0 6.627 5.373 12 12 12h30.114C67.139 414.692 145.264 480 249.635 480c26.301 0 48.562-4.544 61.101-7.788 6.167-1.595 10.027-7.708 8.788-13.957l-8.818-44.49z"></path>
+																	</svg>
+																</div>	 												        													        												        		
+																<div class="d-flex align-items-center ml-2">										        	
+																	<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+																	 width="1280.000000pt" height="914.000000pt" viewBox="0 0 1280.000000 914.000000" class="mr-1"><g transform="translate(0.000000,914.000000) scale(0.100000,-0.100000)"
+																	fill="white" stroke="none" >
+																	<path d="M7015 7934 c-680 -51 -2974 -221 -4765 -352 l-775 -57 1 -45 c1 -25
+																	22 -787 47 -1695 26 -907 51 -1816 58 -2020 l11 -370 36 -53 c20 -30 39 -55
+																	42 -57 3 -2 55 7 115 19 l110 22 -3 344 c-2 190 -7 687 -12 1105 -6 418 -10
+																	875 -9 1015 l0 255 54 -60 c29 -33 332 -373 673 -754 l620 -695 6 -160 c3 -89
+																	18 -943 32 -1899 l26 -1737 49 -108 c27 -59 53 -106 57 -106 4 1 72 10 152 19
+																	80 10 155 21 166 26 21 8 22 11 18 196 -8 356 -46 3665 -42 3669 5 4 270 36
+																	988 120 261 30 702 81 980 114 278 33 777 91 1110 129 333 39 620 73 638 76
+																	l32 6 -5 -183 c-2 -101 -7 -274 -10 -385 -4 -157 -3 -203 7 -210 7 -4 39 -20
+																	70 -34 l58 -26 112 15 c62 8 114 16 115 17 2 1 6 189 11 418 4 229 11 419 14
+																	423 7 6 312 43 1738 209 454 52 835 97 848 99 21 3 22 1 21 -78 0 -44 -26
+																	-810 -58 -1701 l-58 -1620 86 -87 86 -88 135 39 135 38 7 154 c7 138 105 2623
+																	143 3599 8 212 17 419 19 460 3 41 8 181 12 310 l7 235 -509 234 c-280 129
+																	-1008 466 -1619 748 -1026 475 -1113 513 -1160 512 -27 -1 -306 -21 -620 -45z"/>
+																	</g>
+																	</svg>
+																	<p class="text-light m-0" th:text="${RegistrationValidated.tablesQuantity}"></p>										        											        	
+												        		</div>	
+											        			<div class="align-items-center ml-2 d-none d-sm-flex">										        	
+																	<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="calendar-alt" class="svg-inline--fa fa-calendar-alt fa-w-14 mr-1 mb-1" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="white" d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"></path></svg>
+												        			<p class="text-light m-0" th:text="${#dates.format(RegistrationValidated.subscriptionDate, 'dd/MM/yyyy')}"></p>										        											        	
+												        		</div>
+												        	</div>								        			
+									        			</div>
+									        		</div>
+									    		</div>
+									    		<div th:id="|collapse${RegistrationValidated.id}|" class="collapse" th:aria-labelledby="|heading${RegistrationValidated.id}|" data-parent="#accordionResultValidated">
+							            			<div class="card">
+							                    		<div class="card-body py-1">
+															<div class="col-12 d-flex justify-content-between align-items-stretch p-0 flex-wrap">
+																<div class="col-12 col-xl-4 border p-3 my-3">
+																	<h3 class="mb-3"> Informations générales</h3>
+																	<p class="d-flex justify-content-between">Nombre de tables demandées<span th:text="${RegistrationValidated.tablesQuantity}"></span></p>  
+																	<p class="d-flex justify-content-between">Raccordement électrique<span th:text="${RegistrationValidated.electricalSupplyNeed} ? 'oui' : 'non'"></span></p>
+																	<p class="d-flex justify-content-between">Collaborateurs présents<span th:text="${RegistrationValidated.agentProvided} ? 'oui' : 'non'"></span></p> 
+																	<p class="d-flex justify-content-between">Nombre de collaborateurs renseignés<span th:text="${#lists.size(RegistrationValidated.agents)}"></span></p>
+																   </div>
+																<div class="col-12 col-xl-4 border p-3 my-3">
+																	<h3 class="mb-3"> Commentaire de la boutique</h3>
+																	<p class="d-flex justify-content-between" th:if="${RegistrationValidated.comments}!=null and ${RegistrationValidated.comments}!=''" th:text="${RegistrationValidated.comments}"></p>
+																	<p class="d-flex justify-content-between text-danger" th:unless="${RegistrationValidated.comments}!=null and ${RegistrationValidated.comments}!=''">Aucun commentaire</p>
+																</div>
+																<div class="col-12 col-xl-3 border p-3 my-3">
+																	<h3 class="mb-3"> Cout de l'inscription</h3>
+																	<p class="d-flex justify-content-between">Montant total<span th:text="|${RegistrationValidated.registrationCost} €|"></span></p>
+																	   <p class="d-flex justify-content-between" th:if="${RegistrationValidated.shopInvoice == null}">Etat de la facture:<span>non générée</span></p>
+																	   <p class="d-flex justify-content-between" th:unless="${RegistrationValidated.shopInvoice == null}">Etat de la facture<span>éditée</span></p>										                   		
+																	   <p class="d-flex justify-content-between" th:if="${RegistrationValidated.shopInvoice != null}">N°facture:<span th:text="${RegistrationValidated.shopInvoice.id}"></span></p>
+																	   <form method="get" th:action="@{/admin/factureShop}" class="mt-4">
+																		<input type="hidden" name="shopRegId" th:value="${RegistrationValidated.id}">
+																		<button class="btn btnCustom" type="submit" th:if="${RegistrationValidated.shopInvoice == null}">
+																		Generer la facture
+																		</button>
+																	</form>						      
+																	   <form th:action="@{/admin/downloadInvoiceShop}" method="post">
+																		   <input type="hidden" name="invoiceId" th:value="${RegistrationValidated.shopInvoice.id}" th:if="${RegistrationValidated.shopInvoice != null}">
+																		   <button type="submit" class="btn btnCustom" th:if="${RegistrationValidated.shopInvoice != null}">Télécharger la facture (pdf)</button>						      
+																	   </form>
+																	   <form th:action="@{/admin/deleteInvoiceShop}" method="post">
+																		   <input type="hidden" name="invoiceId" th:value="${RegistrationValidated.shopInvoice.id}" th:if="${RegistrationValidated.shopInvoice != null}">
+																		   <button type="submit" class="btn btn-danger mt-1 font-weight-bold" th:if="${RegistrationValidated.shopInvoice != null}" onclick="return confirm('Etes-vous sûrs de vouloir supprimer cette facture ? Celle-ci sera définitivement effacée de la base de donnée !');">Annuler la facture</button>						      
+																	   </form>					      
+																   </div>
+															</div>
+									                    	<div class="col-12 col-lg-12 pb-4 pt-3 d-flex justify-content-center flex-wrap">
+								      							<form method="POST" th:action="@{/admin/unvalidateShopRegistration}" class="mx-1 my-1">
+		                                                            <input type="hidden" name="shopRegId" th:value="${RegistrationValidated.id}">
+		                                                            <input type="hidden" name="eventId" th:value="${RegistrationValidated.event.id}">
+		                                                            <button class="btn btnCustom" type="submit">
+		                                                            Remettre en attente
+		                                                            </button>
+		                                                        </form>
+		                                                        <form method="POST" th:action="@{/admin/cancelShopRegistration}" class="mx-1 my-1">
+		                                                            <input type="hidden" name="shopRegId" th:value="${RegistrationValidated.id}">
+		                                                            <input type="hidden" name="eventId" th:value="${RegistrationValidated.event.id}">
+		                                                            <button class="btn btnCustom" type="submit">
+		                                                            Annuler
+		                                                            </button>
+		                                                        </form>
+										 		                <form method="POST" th:action="@{/admin/deleteShopRegistration}" class="mx-1 my-1">
+		                                                            <input type="hidden" name="shopRegId" th:value="${RegistrationValidated.id}">
+		                                                            <input type="hidden" name="eventId" th:value="${RegistrationValidated.event.id}">
+		                                                            <button class="btn btnCustom" type="submit" onclick="return confirm('Etes-vous sûrs de vouloir supprimer cette inscription ? Elle sera définitivement effacée de la base de donnée !');">
+		                                                            Supprimer
+		                                                            </button>
+		                                                        </form>
+										                   	</div>
+														</div>
+													</div>
+									    		</div>
+									  		</div>						  
+										</div>			
+						      		</div>
+									 <div th:if="${shopRegistrationValidated == null or shopRegistrationValidated.size() ==0}">
+										<p class="mt-3 ml-3 text-danger">Aucune demande d'inscription validée</p>
+									</div>					
+					      		</div>
+				  			</div>
+				  		</div>
+					  	<div class="card">
+					    	<div class="card-header px-0" id="headingCanceledRegistrations">
+					      		<h2 class="mb-0 col-12 px-3">
+						        	<button class="btn btn-link collapsed d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseCanceledRegistrations" aria-expanded="false" aria-controls="collapseCanceledRegistrations">
+									<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+						          	<p class="my-0">Inscriptions annulées</p>
+						        		<span class="badge badge-danger ml-auto my-0" th:text="${shopRegistrationCanceled.size()}"></span>
+						        	</button>
+					      		</h2>
+					    	</div>
+				    		<div id="collapseCanceledRegistrations" th:class="|collapse ${(toggleCard == 'CanceledRegistrations')? 'show' : ''}|" aria-labelledby="headingCanceledRegistrations" data-parent="#accordionRegistrations">
+					      		<div class="card-body">
+						      		<div th:if="${shopRegistrationCanceled!= null and shopRegistrationCanceled.size()!=0}">
+									<!-- accordeon result -->
+										<div class="accordion" id="accordionResultCanceled">
+											<div th:each="RegistrationCanceled : ${shopRegistrationCanceled}" class="card">
+											    <div class="card-header bg-dark" th:id="|heading${RegistrationCanceled.id}|">
+											        <div class="pendingButton b-0 bg-dark" data-toggle="collapse" th:data-target="|#collapse${RegistrationCanceled.id}|" aria-expanded="true" th:aria-controls="|collapse${RegistrationCanceled.id}|">
+										        		<div class="d-flex flex-row justify-content-between">
+  															<div class="d-flex">
+	  															<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="white" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                                            											        		
+												        		<p class="text-light m-0" th:text="|${RegistrationCanceled.society.name}"></p>
+										        			</div>
+										        			<div class="d-flex flex-row w-50 justify-content-end">
+											        			<div class="d-flex align-items-center ml-2">										        	
+																	<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+																	 width="1280.000000pt" height="914.000000pt" viewBox="0 0 1280.000000 914.000000" class="mr-1"><g transform="translate(0.000000,914.000000) scale(0.100000,-0.100000)"
+																	fill="white" stroke="none" >
+																	<path d="M7015 7934 c-680 -51 -2974 -221 -4765 -352 l-775 -57 1 -45 c1 -25
+																	22 -787 47 -1695 26 -907 51 -1816 58 -2020 l11 -370 36 -53 c20 -30 39 -55
+																	42 -57 3 -2 55 7 115 19 l110 22 -3 344 c-2 190 -7 687 -12 1105 -6 418 -10
+																	875 -9 1015 l0 255 54 -60 c29 -33 332 -373 673 -754 l620 -695 6 -160 c3 -89
+																	18 -943 32 -1899 l26 -1737 49 -108 c27 -59 53 -106 57 -106 4 1 72 10 152 19
+																	80 10 155 21 166 26 21 8 22 11 18 196 -8 356 -46 3665 -42 3669 5 4 270 36
+																	988 120 261 30 702 81 980 114 278 33 777 91 1110 129 333 39 620 73 638 76
+																	l32 6 -5 -183 c-2 -101 -7 -274 -10 -385 -4 -157 -3 -203 7 -210 7 -4 39 -20
+																	70 -34 l58 -26 112 15 c62 8 114 16 115 17 2 1 6 189 11 418 4 229 11 419 14
+																	423 7 6 312 43 1738 209 454 52 835 97 848 99 21 3 22 1 21 -78 0 -44 -26
+																	-810 -58 -1701 l-58 -1620 86 -87 86 -88 135 39 135 38 7 154 c7 138 105 2623
+																	143 3599 8 212 17 419 19 460 3 41 8 181 12 310 l7 235 -509 234 c-280 129
+																	-1008 466 -1619 748 -1026 475 -1113 513 -1160 512 -27 -1 -306 -21 -620 -45z"/>
+																	</g>
+																	</svg>
+																	<p class="text-light m-0" th:text="${RegistrationCanceled.tablesQuantity}"></p>										        											        	
+												        		</div>									        												        		
+											        			<div class="align-items-center ml-2 d-none d-sm-flex">										        	
+																	<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="calendar-alt" class="svg-inline--fa fa-calendar-alt fa-w-14 mr-1 mb-1" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="white" d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"></path></svg>
+												        			<p class="text-light m-0" th:text="${#dates.format(RegistrationCanceled.subscriptionDate, 'dd/MM/yyyy')}"></p>										        											        	
+												        		</div>
+												        	</div>								        			
+									        			</div>
+											        </div>
+											    </div>
+											    <div th:id="|collapse${RegistrationCanceled.id}|" class="collapse" th:aria-labelledby="|heading${RegistrationCanceled.id}|" data-parent="#accordionResultCanceled">
+									            	<div class="card">
+									                    <div class="card-body py-1">
+															<div class="col-12 d-flex justify-content-between align-items-stretch p-0 flex-wrap">
+																<div class="col-12 col-xl-4 border p-3 my-3">
+																	<h3 class="mb-3"> Informations générales</h3>
+																	<p class="d-flex justify-content-between">Nombre de tables demandées<span th:text="${RegistrationCanceled.tablesQuantity}"></span></p>  
+																	<p class="d-flex justify-content-between">Raccordement électrique<span th:text="${RegistrationCanceled.electricalSupplyNeed} ? 'oui' : 'non'"></span></p>
+																	<p class="d-flex justify-content-between">Collaborateurs présents<span th:text="${RegistrationCanceled.agentProvided} ? 'oui' : 'non'"></span></p>
+																	<p class="d-flex justify-content-between">Nombre de collaborateurs renseignés<span th:text="${#lists.size(RegistrationCanceled.agents)}"></span></p>
+																</div>									 
+																<div class="col-12 col-xl-4 border p-3 my-3">
+																	<h3 class="mb-3"> Commentaire de la boutique</h3>
+																	<p class="d-flex justify-content-between" th:if="${RegistrationCanceled.comments}!=null and ${RegistrationCanceled.comments}!=''" th:text="${RegistrationCanceled.comments}"></p>
+																	<p class="d-flex justify-content-between text-danger" th:unless="${RegistrationCanceled.comments}!=null and ${RegistrationCanceled.comments}!=''">Aucun commentaire</p>
+																</div>
+																<div class="col-12 col-xl-3 border p-3 my-3">
+																	<h3 class="mb-3"> Cout de l'inscription</h3>
+																	<p class="d-flex justify-content-between">Montant total<span th:text="|${RegistrationCanceled.registrationCost} €|"></span></p>
+																</div>
+															</div>
+															<div class="col-12 col-lg-12 pb-4 pt-3 d-flex justify-content-center flex-wrap">
+																<form method="POST" th:action="@{/admin/validateShopRegistration}" class="mx-1 my-1">
+																	<input type="hidden" name="shopRegId" th:value="${RegistrationCanceled.id}">
+																	<input type="hidden" name="eventId" th:value="${RegistrationCanceled.event.id}">
+																	<button class="btn btnCustom" type="submit">
+																	Valider
+																	</button>
+																</form>
+																	<form method="POST" th:action="@{/admin/reactivateShopRegistration}" class="mx-1 my-1">
+																	<input type="hidden" name="shopRegId" th:value="${RegistrationCanceled.id}">
+																	<input type="hidden" name="eventId" th:value="${RegistrationCanceled.event.id}">
+																	<button class="btn btnCustom" type="submit">
+																	Réactiver
+																	</button>
+																</form>
+																	<form method="POST" th:action="@{/admin/deleteShopRegistration}" class="mx-1 my-1">
+																	<input type="hidden" name="shopRegId" th:value="${RegistrationCanceled.id}">
+																	<input type="hidden" name="eventId" th:value="${RegistrationCanceled.event.id}">
+																	<button class="btn btnCustom" type="submit" onclick="return confirm('Etes-vous sûrs de vouloir supprimer cette inscription ? Elle sera définitivement effacée de la base de donnée !');">
+																	Supprimer
+																	</button>
+																</form>
+															</div>															
+														</div>
+													</div>
+											    </div>
+								  			</div>						  
+										</div>			
+						      		</div>
+									 <div th:if="${shopRegistrationCanceled == null or shopRegistrationCanceled.size() ==0}">
+										<p class="mt-3 ml-3 text-danger">Aucune demande d'inscription annulée</p>
+									</div>					
+					      		</div>
+				  			</div>
+				  		</div>
+					 	<div class="card">
+					    	<div class="card-header px-0" id="SearchForRegistrations">
+						      	<h2 class="mb-0  col-12 px-3">
+						        	<button class="btn btn-link collapsed pl-0 d-flex align-items-center" type="button" data-toggle="collapse" data-target="#collapseSearchRegistrations" aria-expanded="false" aria-controls="collapseSearchRegistrations">
+										<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        					      							          	
+							          	<p class="my-0">Rechercher l'inscription d'une société</p>
+						        	</button>
+						      	</h2>
+					    	</div>
+				    <div id="collapseSearchRegistrations" th:class="|collapse ${(toggleCard == 'SearchRegistrations')? 'show' : ''}|" aria-labelledby="headingSearchRegistrations" data-parent="#accordionRegistrations">
+					      <div class="card-body">
+						  	<div class="container-fluid">
+						  		<div class="row">							    
+									<h3 class="pb-2 pl-0 col-12 mt-3">Rechercher l'inscription d'un éditeur</h3>
+									<form class="col-sm-8 col-md-6 col-lg-3" th:action="@{/admin/researchForShopRegistrations}" method="post">
+										<div class="d-flex flex-column">
+											<label for="orderByOption" class="w-auto">Option de tri</label>
+											<select id="orderByOption" name="orderBy">
+												<option value="name">Alphabétique</option>
+												<option value="tables">Nombre de tables</option>				    			
+											</select>
+										</div>
+										<div class="d-flex flex-column mt-3" >
+											<label for="societyName" class="">Nom de la société</label>
+											<input name="eventId" type="hidden" th:value="${lastEvent.id}">
+											<input name="societyName" type="text" >
+											<button class="btn btnCustom btnFit mt-3" type="submit">Rechercher</button>
+										</div>
+									</form>
+								</div>							    
+						     </div>
+					     		<div class="row mt-3 ">
+									<div class="col-lg-12 mb-3">  
+									     <div class="" id="resultForRegistrations" th:if="${shopRegistrationsResult!= null and shopRegistrationsResult != 'none'}">
+									     <hr class="mt-4"/>
+									     	<h3 th:text="|${shopRegistrationsResult.size()} résultat(s) pour la recherche : ${societySearched}|"></h3>
+											<!-- accordeon result -->
+											<div class="accordion" id="accordionResultSearched">
+											  <div th:each="registrationsResult : ${shopRegistrationsResult}" class="card">
+											    <div class="card-header bg-dark" th:id="|heading${registrationsResult.id}|">
+											        <div class="pendingButton b-0 bg-dark" data-toggle="collapse" th:data-target="|#collapse${registrationsResult.id}|" aria-expanded="true" th:aria-controls="|collapse${registrationsResult.id}|">
+										        		<div class="d-flex flex-row justify-content-between">
+											        		<div class="text-light d-flex">
+	  															<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-2" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="white" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                                            											        		
+												        		<p class="my-0 d-flex align-items-center" th:inline="text">
+												        			<span class="mr-2 badge badge-success badge-search" th:if="${registrationsResult.state} =='validated'"> </span>
+											                    	<span class="mr-2 badge badge-warning badge-search" th:if="${registrationsResult.state} =='pending'"> </span>
+											                    	<span class="mr-2 badge badge-danger badge-search" th:if="${registrationsResult.state} =='canceled'"> </span>
+												        			[[${registrationsResult.society.name}]]
+												        		</p>
+												        	</div>
+										        			<div class="d-flex flex-row w-20 justify-content-end">
+											        			<div class="d-flex align-items-center ml-2">										        	
+																	<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+																	 width="1280.000000pt" height="914.000000pt" viewBox="0 0 1280.000000 914.000000" class="mr-1"><g transform="translate(0.000000,914.000000) scale(0.100000,-0.100000)"
+																	fill="white" stroke="none" >
+																	<path d="M7015 7934 c-680 -51 -2974 -221 -4765 -352 l-775 -57 1 -45 c1 -25
+																	22 -787 47 -1695 26 -907 51 -1816 58 -2020 l11 -370 36 -53 c20 -30 39 -55
+																	42 -57 3 -2 55 7 115 19 l110 22 -3 344 c-2 190 -7 687 -12 1105 -6 418 -10
+																	875 -9 1015 l0 255 54 -60 c29 -33 332 -373 673 -754 l620 -695 6 -160 c3 -89
+																	18 -943 32 -1899 l26 -1737 49 -108 c27 -59 53 -106 57 -106 4 1 72 10 152 19
+																	80 10 155 21 166 26 21 8 22 11 18 196 -8 356 -46 3665 -42 3669 5 4 270 36
+																	988 120 261 30 702 81 980 114 278 33 777 91 1110 129 333 39 620 73 638 76
+																	l32 6 -5 -183 c-2 -101 -7 -274 -10 -385 -4 -157 -3 -203 7 -210 7 -4 39 -20
+																	70 -34 l58 -26 112 15 c62 8 114 16 115 17 2 1 6 189 11 418 4 229 11 419 14
+																	423 7 6 312 43 1738 209 454 52 835 97 848 99 21 3 22 1 21 -78 0 -44 -26
+																	-810 -58 -1701 l-58 -1620 86 -87 86 -88 135 39 135 38 7 154 c7 138 105 2623
+																	143 3599 8 212 17 419 19 460 3 41 8 181 12 310 l7 235 -509 234 c-280 129
+																	-1008 466 -1619 748 -1026 475 -1113 513 -1160 512 -27 -1 -306 -21 -620 -45z"/>
+																	</g>
+																	</svg>
+																	<p class="text-light m-0" th:text="${registrationsResult.tablesQuantity}"></p>										        											        	
+												        		</div>		
+																	        												        		
+											        			<div class="align-items-center ml-2 d-none d-sm-flex">										        	
+																	<svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="calendar-alt" class="svg-inline--fa fa-calendar-alt fa-w-14 mr-1 mb-1" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="white" d="M148 288h-40c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v40c0 6.6-5.4 12-12 12zm108-12v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 96v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm-96 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm192 0v-40c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v40c0 6.6 5.4 12 12 12h40c6.6 0 12-5.4 12-12zm96-260v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h48V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h128V12c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h48c26.5 0 48 21.5 48 48zm-48 346V160H48v298c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"></path></svg>
+												        			<p class="text-light m-0" th:text="${#dates.format(registrationsResult.subscriptionDate, 'dd/MM/yyyy')}"></p>										        											        	
+												        		</div>
+												        	</div>								        			
+									        			</div>			        
+											        </div>
+											    </div>
+											    <div th:id="|collapse${registrationsResult.id}|" class="collapse" th:aria-labelledby="|heading${registrationsResult.id}|" data-parent="#accordionResultSearched">
+									            	<div class="card">
+									                    <div class="card-body py-1">
+															<div class="col-12 d-flex justify-content-between align-items-stretch p-0 flex-wrap">
+																<div class="col-12 col-xl-4 border p-3 my-3">
+																	<h3 class="mb-3"> Informations générales</h3>
+																	<p class="d-flex justify-content-between">Nombre de tables demandées<span th:text="${registrationsResult.tablesQuantity}"></span></p>  
+																	<p class="d-flex justify-content-between">Raccordement électrique<span th:text="${registrationsResultelectricalSupplyNeed} ? 'oui' : 'non'"></span></p>
+																	<p class="d-flex justify-content-between">Collaborateurs présents<span th:text="${registrationsResult.agentProvided} ? 'oui' : 'non'"></span></p>
+																	<p class="d-flex justify-content-between">Nombre de collaborateurs renseignés<span th:text="${#lists.size(registrationsResult.agents)}"></span></p> 
+																</div>
+																<div class="col-12 col-xl-4 border p-3 my-3">
+																	<h3 class="mb-3"> Commentaire de la boutique</h3>
+																	<p class="d-flex justify-content-between" th:if="${registrationsResult.comments}!=null and ${registrationsResult.comments}!=''" th:text="${registrationsResult.comments}"></p>
+																	<p class="d-flex justify-content-between text-danger" th:unless="${registrationsResult.comments}!=null and ${registrationsResult.comments}!=''">Aucun commentaire</p>
+																</div>
+																<div class="col-12 col-xl-3 border p-3 my-3">
+																	<h3 class="mb-3"> Cout de l'inscription</h3>
+																	<p class="d-flex justify-content-between">Montant total<span th:text="|${registrationsResult.registrationCost} €|"></span></p>
+																		  <p class="d-flex justify-content-between" th:if="${registrationsResult.shopInvoice == null}">Etat de la facture<span>non générée</span></p>
+																	   <p class="d-flex justify-content-between" th:unless="${registrationsResult.shopInvoice == null}">Etat de la facture<span>éditée</span></p>										                   		
+																	   <p class="d-flex justify-content-between" th:if="${registrationsResult.shopInvoice != null}">N°facture<span th:text="${registrationsResult.shopInvoice.id}"></span></p>						      
+																	   <form method="get" th:action="@{/admin/factureShop}" class="mx-1 my-1" th:if="${registrationsResult.state !='canceled'}">
+																		<input type="hidden" name="shopRegId" th:value="${registrationsResult.id}" >
+																		<button class="btn btnCustom" type="submit" data-toggle="collapse" data-target="#collapseUpdateEvent" aria-expanded="false" aria-controls="collapseUpdateEvent" th:if="${registrationsResult.shopInvoice == null}">
+																		Generer la facture
+																		</button>
+																	</form>
+																	<form th:action="@{/admin/downloadInvoiceShop}" method="post">
+																		<input type="hidden" name="invoiceId" th:value="${registrationsResult.shopInvoice.id}" th:if="${registrationsResult.shopInvoice != null}">
+																		<button type="submit" class="btn btnCustom" th:if="${registrationsResult.shopInvoice != null}">Télécharger la facture (pdf)</button>						      
+																	</form>
+																	<form th:action="@{/admin/deleteInvoiceShop}" method="post">
+																		<input type="hidden" name="invoiceId" th:value="${registrationsResult.shopInvoice.id}" th:if="${registrationsResult.shopInvoice != null}">
+																		<button type="submit" class="btn btn-danger mt-1 font-weight-bold" th:if="${registrationsResult.shopInvoice != null}" onclick="return confirm('Etes-vous sûrs de vouloir supprimer cette facture ? Celle-ci sera définitivement effacée de la base de donnée !');">Annuler la facture</button>						      
+																	</form>						      
+																</div>
+															</div>										                   	
+									                    	<div class="col-12 col-lg-12 pb-4 pt-3 d-flex justify-content-center flex-wrap">
+																<form method="post" th:action="@{/admin/editerInscription}">
+																	<input type="submit" class="btn btnCustom mx-1 my-1" value="Modifier">
+																	<input type="hidden" th:value="${registrationsResult.id}" name="registrationId">
+																</form>
+																<form method="POST" th:action="@{/admin/validateShopRegistration}" class="mx-1 my-1">
+																	<input type="hidden" name="shopRegId" th:value="${registrationsResult.id}">
+																	<input type="hidden" name="eventId" th:value="${registrationsResult.event.id}">
+																	<button class="btn btnCustom" type="submit">
+																	Valider
+																	</button>
+																</form>
+																<form method="POST" th:action="@{/admin/cancelShopRegistration}" class="mx-1 my-1">
+																	<input type="hidden" name="shopRegId" th:value="${registrationsResult.id}">
+																	<input type="hidden" name="eventId" th:value="${registrationsResult.event.id}">
+																	<button class="btn btnCustom" type="submit">
+																	Annuler
+																	</button>
+																</form>
+																<form method="POST" th:action="@{/admin/deleteShopRegistration}" class="mx-1 my-1">
+																	<input type="hidden" name="shopRegId" th:value="${registrationsResult.id}">
+																	<input type="hidden" name="eventId" th:value="${registrationsResult.event.id}">
+																	<button class="btn btnCustom" type="submit" onclick="return confirm('Etes-vous sûrs de vouloir supprimer cette inscription ? Elle sera définitivement effacée de la base de donnée !');">
+																	Supprimer
+																	</button>
+																</form>
+										                   	</div>
+														</div>
+													</div>
+											    </div>
+											  </div>						  
+											</div>	
+										</div>			
+										<div th:if="${shopRegistrationsResult == 'none'}">
+											<p class="mt-4 text-danger">Aucun compte ne correspond à votre recherche</p>
+										</div>
+									</div>
+								</div>
+							</div>
+				  		</div>
+				 	 </div>
+			  	</div>
+			 </div>
+		</div>		
+		  <!-- fin accordion -->
+		<hr class="mt-4"/>
+		<div>
+			<div th:if="${events.size() !=0}" class="row">
+				<div class="col-12">
+					<h3>Export de toutes les inscriptions boutique pour l'évenement</h3>
+				</div>
+			</div>	
+			<div th:if="${events.size() !=0}" class="row">
+					<form class="col-12 mt-2" th:action="@{/admin/exportShop}" method="get">	    		
+			    		<input name="eventId" type="hidden" th:value="${lastEvent.id}">		
+			    		<button class="btn btnCustom" type="submit">Export CSV</button>
+			    	</form>
+			</div>		
+		</div>
+	  </section>
+	  
+	</div>
+</body>
+	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="../../JS/adminHome.js"></script>
+</html>

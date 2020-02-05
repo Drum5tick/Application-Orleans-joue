@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+	<head>
+	    <meta charset="UTF-8">
+	</head>
+	<main th:fragment="subscribeForm :: subscribeProtozoneForm" th:if="${connectedUser.userRole.wording} == 'PROTOZONE'">
+		<div class="container-fluid mainContainer">
+	        <div class="row">
+	            <div class="col p-2 text-center text-sm-left">
+	                <h1>Formulaire d'inscription</h1>
+	            </div>
+	        </div>
+	        <div class="row col-12 col-lg-7 p-0 mx-auto">
+	            <div id="msform" class="msform">               
+	                <form method="post" th:action="@{/submitProtozoneRegistration}">
+	                    <input type="hidden" name="eventId" th:value="${event.id}">
+	                    <input type="hidden"  name="userId" th:value="${connectedUser.id}">                           
+	                    <fieldset id="state_1" class="registrationState">
+	                        <div class="quitIcon">
+	                            <a href="#" title="Annuler l'inscription à l'évènement" onclick="confirmation();">
+	                                <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="times-circle" class="svg-inline--fa fa-times-circle fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+	                                    <path d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path>
+	                                </svg>
+	                            </a>
+	                        </div>
+	                        <h2 class="fs-title">Informations générales</h2>
+	                        <h3 class="fs-subtitle subscribeForm" th:text="${event.name}"></h3>
+	                        <fieldset class="border p-3 text-left col-9 mx-auto mb-3">
+	                            <legend>Prototype présenté</legend>
+	                            <p>Vous souhaitez vous inscrire dans la protozone. Merci de décrire en quelques lignes le prototype de jeu que vous souhaitez présenter.</p>
+		                        <div class="p-1 text-left col-12 mx-auto mb-3">
+		                            <label for="comments" class="w-100 text-left">Description de votre prototype</label>
+		                            <textarea id="comments" class="comments" name="comments" rows="6" cols="30" placeholder="Description, nom, nombre de joueurs possibles..."></textarea>
+		                        </div>
+		                    </fieldset>
+	                        	<button type="submit" name="registration" class="next action-button">Valider</button>
+	                	</fieldset>  
+	                </form>
+	            </div>
+	        </div>
+	    </div>
+	</main>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+	<head>
+	    <meta charset="UTF-8">
+	</head>
+	<section th:fragment="modificationInformationPersonnelle :: protozoneAccountModif" th:if="${connectedUser.userRole.wording} == 'PROTOZONE'" id="personalInfos" class="fluid-container">
+		<div class="containerStyle userInfosModifCardVolunteer col-11 col-md-8 col-lg-6 p-1 p-lg-4">  
+			<h2 class="text-center p-0 mb-4 mt-3 accountModifTitle">Mes informations</h2>
+			<form method="post" th:action="@{/userAccountModifSave}" th:object="${connectedUser}" enctype="multipart/form-data">
+				<input type="hidden" name="id" th:field="*{id}"/>
+				<div class="row justify-content-around">
+					<fieldset class="col-xl-10 col-10 border p-lg-1 p-0 p-md-3 mt-3 text-left">
+						<div class="row justify-content-center mt-5">  
+							<label for="firstname" class="col-10 col-lg-3 mt-2">Prénom <span class="requiredField">*</span></label>
+							<input class="col-9 col-lg-6 inputBars" type="text" th:field="*{firstname}" required>
+						</div>
+						<div class="row justify-content-center mt-3">  
+							<label for="lastname" class="col-10 col-lg-3 mt-2">Nom <span class="requiredField">*</span></label>
+							<input class="col-9 col-lg-6 inputBars" type="text" th:field="*{lastname}" required>
+						</div>
+						<div class="row justify-content-center mt-3">  
+							<label for="lastname" class="col-10 col-lg-3 mt-2">Téléphone <span class="requiredField">*</span></label>
+							<input class="col-9 col-lg-6 inputBars" pattern="(0|\\+33|0033)[1-9][0-9]{8}" type="tel" th:field="*{address.phoneNumber1}" required>
+						</div>
+						<div class="row justify-content-center mt-3">  
+							<label for="email" class="col-10 col-lg-3 mt-2">Adresse email </label>
+							<input class="col-9 col-lg-6 inputBars" type="email" th:field="*{email}" placeholder="eric.durand@mail.com" disabled>
+							<div class="col-10 d-flex justify-content-center ">
+								<small id="emailHelp" class="form-text text-muted">Pour changer votre email, veuillez contacter l'admistrateur du site</small>
+							</div>
+						</div>
+						<div class="row justify-content-center mt-3">  
+							<label for="password" class="col-10 col-lg-3 mt-2">Mot de passe</label>
+							<input class="col-10 col-lg-6 inputBars" type="password" pattern=".{8,}" title="8 charactères minimum" th:field="*{password}">
+						</div>
+						<div class="row justify-content-center mt-3">  
+							<label for="picture" class="col-10 col-lg-3 my-auto">Image du compte </label>
+							<div class="col-5 col-md-3 col-lg-6">
+								<img class="profilePictVolunteer mx-auto" th:src="${connectedUser.profilePicture}" alt="Image du profil utilisateur" name="picture">
+							</div>
+						</div>
+						<div class="row justify-content-center my-4">  
+							<label for="filePicture" class="col-10 col-lg-3 mb-2">Changer image </label>
+							<input class="col-11 col-lg-6 fileBtn" type="file" id="profilePicture" name="filePicture">
+						</div>
+					</fieldset>
+				</div>
+				<p class="col-lg-4 col-5 text-center ml-auto mt-2 requiredFieldInfo"><span class="requiredField">*</span> Champs obligatoires</p>
+				<div class="row justify-content-center mb-4 mb-lg-2">				
+					<input class="col-5 col-md-3 col-lg-2 btn btn-primary" type="submit" value="Validation">
+					<!-- <input type="hidden" name="profilePicture" value="pictures/default_avatar.jpg">  -->
+					<input type="hidden" name="user_role" th:value=${regUserRole}>
+				</div>
+				<div class="row justify-content-center mt-1 mb-2">
+					<a class="col-5 col-md-3 col-lg-2 btn btn-primary backBtn" href="/accueil">Retour</a>
+				</div>					
+			</form>
+		</div>
+	</section>
+</html>

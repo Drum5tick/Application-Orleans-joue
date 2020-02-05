@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Acme&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Acme|Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../../CSS/adminEditorRegistrationModif.css">
+    <link rel="stylesheet" type="text/css" href="../../CSS/adminHome.css">
+    <link rel="stylesheet" type="text/css" href="../../CSS/toast.css">
+    <title>Modification des inscriptions bénévoles</title>
+    <script>
+        var toastMsg = "[[${toastMsg}]]";
+    </script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <aside th:replace="adminSidebar.html :: sidebar"></aside>
+        <div th:replace="adminSidebar.html :: navbar"></div>
+        <section id="content-wrapper">
+            <div class="row d-flex justify-content-between flex-wrap">
+                <div class="col">
+                    <h2 class="content-title mt-3 mb-4" th:text="|Modification de l'inscription du bénévole: ${registration.user.firstname} ${registration.user.lastname}|">Gestion des inscriptions des bénévoles</h2>
+                </div>
+                <form class="d-flex align-items-center " th:action="@{/admin/gestionBenevoles}">
+                	<input type="hidden" name="eventId" th:value="${registration.event.id}">
+                	<button type="submit" class="btn btnCustom m-3">Retour</button>
+                </form>
+            </div>
+            
+            <div class="accordion" id="accordionUpdateRegistration">
+
+	            <div class="card">
+	                <div class="card-header" id="headingInfo">
+	                    <h2 class="mb-0">
+	                        <a href="#collapseInfo" class="btn btn-link" data-toggle="collapse" aria-expanded="false" aria-controls="collapseInfo">
+	                            Informations générales
+	                        </a>
+	                    </h2>
+	                </div>
+	                <div id="collapseInfo" class="collapse show" aria-labelledby="headingInfo" data-parent="#accordionUpdateRegistration">
+	                    <div class="card-body">
+							<form class="container" method="post" th:action="@{/admin/saveModifiedVolunteerReg}" th:object="${registration}">
+								<input type="hidden" name="registrationId" th:value="${registration.id}"></input>
+			                        <div class="row d-flex justify-content-between">
+				                        <fieldset class="border p-3 text-left col-12 col-md-4 mx-auto mb-3">
+				                            <legend>Activité(s) souhaitée(s)</legend>
+				                            <div class="row flex-row-reverse mb-4">
+						                	    <div class="col-10">
+					                            	<label class="form-check-label" for="cocher">Toutes</label>
+				                                </div>
+				                                <div class="col-1  d-flex align-items-center justify-content-center">
+													<input class="form-check-input m-auto pt-2" type="checkbox" id="checkTask">
+				                                </div>    
+											</div>
+				                            <div class="row flex-row-reverse" th:each="eventTask : ${eventTasks}">
+				                                <div class="col-10">
+					                            	<label class="form-check-label" for="taskName" th:text="${eventTask.task.name}"></label>
+				                                </div>
+				                                <div class="col-1  d-flex align-items-center justify-content-center">
+				                                	<input class="form-check-input m-auto pt-2 checkClassTask" type="checkbox" id="taskName" name="chosenTasks" th:value="${eventTask.task.id}" th:checked="${#lists.contains(registration.chosenTasks, eventTask.task)}">
+				                                </div>
+				                                <!-- add -->              
+				                            </div>
+				                         </fieldset>
+				                         <fieldset class="border p-3 text-left col-12 col-md-4 mx-auto mb-3">
+				                            <legend>Disponibilité</legend>
+				                            <div class="row flex-row-reverse mb-4">
+						                	    <div class="col-10">
+					                            	<label class="form-check-label" for="cocher">Toutes</label>
+				                                </div>
+				                                <div class="col-1  d-flex align-items-center justify-content-center">
+													<input class="form-check-input m-auto pt-2" type="checkbox" id="checkTimeSlot">
+				                                </div>    
+											</div>
+				                            <div class="row d-flex flex-row-reverse" th:each="timeSlot : ${timeSlots}">
+				                                <div class="col-10">
+				                                    <label class="form-check-label" for="timeSlotName" th:text="|${timeSlot.name} ${timeSlot.description}|"></label>
+				                                </div>
+				                                <div class="col-1 d-flex align-items-center justify-content-center"> 
+				                                    <input class="form-check-input m-auto pt-2 checkClassTimeSlot" type="checkbox" id="timeSlotName" name="chosenTimeSlot" th:value="${timeSlot.id}" th:checked="${#lists.contains(registration.chosenTimeSlot, timeSlot)}">
+				                                </div>                   
+				                            </div>
+				                        
+				                    	</fieldset>
+				                    </div>
+				            	<div class="row justify-content-center">				            	
+					            	<button type="submit" name="registration" class="btn btnCustom">Valider</button>
+				            	</div>
+			                </form>
+	                	</div>
+	            	</div>
+	           	</div>
+	        </div>
+        </section>
+    </div>
+    <div th:replace="toasts :: toats"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script type="text/javascript" src="../JS/adminHome.js"></script>
+<script type="text/javascript" src="../JS/main.js"></script>
+ <script src="../JS/subscribeVolunteer.js"></script>
+
+</html>

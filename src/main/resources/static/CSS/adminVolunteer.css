@@ -1,0 +1,17 @@
+.svgActionAgent{
+	background: none;
+	border: none;
+	fill:orange;
+	cursor:pointer;
+}
+
+.addAgentSVG{
+	height: 3 rem !important;
+	width: auto;
+}
+.svgActionAgentDelete{
+	background: none;
+	border: none;
+	fill:var(--danger);
+	cursor:pointer;
+}

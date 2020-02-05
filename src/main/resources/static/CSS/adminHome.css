@@ -1,0 +1,432 @@
+:root {
+    --orange: #ec5d31;
+	--lightGrey: #eadecd;
+    --purple: #5e3388;
+    --grey: #c4c4c4; 
+    --darkGrey: #0f1011db;
+    --mediumGrey:#464646;
+    --active: #82D485;
+    --danger: #DC3545;
+    --update: orange;
+    --font-1: 'Acme';
+    --font-2: 'Roboto';
+    --font-nav: 'Open Sans';
+}
+
+body {
+  padding-bottom: 30px;
+  position: relative;
+  min-height: 100%;
+}
+
+a {
+  transition: background 0.2s, color 0.2s;
+}
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+
+*{
+	font-family: var(--font-2), 'Arial', sans-serif;
+}
+
+.redSpan {
+	font-weight: bold;
+	color: red;
+}
+
+.greenSpan {
+	color: green;
+	font-weight: bold;
+}
+
+.maxTables {
+	font-weight: bold;
+	color: #0083ff;
+}
+
+.legendBadge {
+	height: 15px;
+	width: 15px;
+	border-radius: 15%;
+}
+
+.card-header p {
+	text-align: left;
+}
+
+.card-header {
+	cursor: default;
+}
+
+.card-header button {
+	height: 100%;
+	width: 100%;
+	cursor: pointer;
+}
+
+
+#wrapper {
+  padding-left: 0;
+  transition: all 0.5s ease;
+  position: relative;
+}
+
+#sidebar-wrapper {
+  z-index: 1000;
+  position: fixed;
+  left: 250px;
+  width: 0;
+  height: 100%;
+  margin-left: -250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #222;
+  transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+  width: 250px;
+}
+
+.sidebar-brand {
+  position: absolute;
+  top: 0;
+  width: 250px;
+  text-align: center;
+  padding: 20px 0;
+  padding-left: 10px;
+}
+.sidebar-brand h2 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 22px;
+  color: #fff;
+  font-family: var(--font-1), 'Arial', sans-serif; 
+}
+
+.sidebar-nav {
+  position: absolute;
+  top: 75px;
+  width: 250px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sidebar-nav > li {
+  text-indent: 5px;
+  line-height: 45px;
+}
+.sidebar-nav > li a {
+  display: block;
+  text-decoration: none;
+  color: #757575;
+  font-weight: 600;
+  font-size: 15px;
+}
+.sidebar-nav > li > a:hover,
+.sidebar-nav > li.active > a {
+  text-decoration: none;
+  color: #fff;
+  background: var(--orange);
+}
+.sidebar-nav > li > a svg {
+  font-size: 25px;
+  width: 30px;
+  margin:0 10px;
+  margin-right: 15px;
+}
+
+#navbar-wrapper {
+    width: 100%;
+    z-index: 2;
+    position: sticky;
+    top: 0;
+    
+}
+#wrapper.toggled #navbar-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+#navbar-wrapper .navbar {
+  border-width: 0 0 0 0;
+  background-color: #eee;
+  font-size: 24px;
+  margin-bottom: 0;
+  border-radius: 0;
+}
+#navbar-wrapper .navbar a {
+  color: #757575;
+}
+#navbar-wrapper .navbar a:hover {
+  color: var(--orange);
+}
+
+#content-wrapper {
+  width: 100%;
+  position: absolute;
+  padding: 15px;
+  top: 100px;
+}
+
+.btnCustom{
+	background-color: var(--orange);
+	font-weight: bold;
+	color:white;	
+}
+
+.btnCustom:hover{
+	background-color: var(--purple);
+	font-weight: bold;	
+	color:white;
+}
+
+.profilePict {
+	width: 80px;
+	height: 80px;
+}
+
+#wrapper.toggled #content-wrapper {
+  position: absolute;
+  margin-right: -250px;
+}
+
+
+section svg {
+	height: 16px;
+	width: auto;
+}
+	
+section svg:hover {
+	color:var(--danger);
+}
+
+.svg-btn {
+	background: none;
+	border: none;
+	margin: 0;
+	padding: 0;
+}
+
+
+.unlockSVG{
+	width:20px;
+	fill: var(--orange);
+}
+
+.pendingButton{
+	width:100%;
+}
+
+.sidebar-nav{
+	height:80%;
+	max-height:85vh;
+}
+
+.sidebar-brand{
+	height:15%;
+}
+
+@media (min-width: 992px) {
+  #wrapper {
+    padding-left: 250px;
+  }
+  
+  #wrapper.toggled {
+    padding-left: 60px;
+  }
+
+  #sidebar-wrapper {
+    width: 250px;
+  }
+  
+  #wrapper.toggled #sidebar-wrapper {
+    width: 60px;
+  }
+  
+  #wrapper.toggled #navbar-wrapper {
+    position: absolute;
+    margin-right: -190px;
+}
+  
+  #wrapper.toggled #content-wrapper {
+    position: absolute;
+    margin-right: -190px;
+  }
+
+
+
+  #wrapper.toggled {
+    padding-left: 60px;
+  }
+
+  #content-wrapper {
+    position: relative;
+    top: 0;
+  }
+
+  #wrapper.toggled #navbar-wrapper,
+  #wrapper.toggled #content-wrapper {
+    position: sticky;
+    top:0;
+    margin-right: 60px;
+  }
+    #navbar-wrapper {
+    position: sticky;
+    top: 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  #wrapper {
+    padding-left: 60px;
+  }
+
+  #sidebar-wrapper {
+    width: 60px;
+  }
+  
+#wrapper.toggled #navbar-wrapper {
+    position: absolute;
+    margin-right: -250px;
+}
+  
+  #wrapper.toggled #content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+  }
+
+
+
+  #wrapper.toggled {
+    padding-left: 250px;
+  }
+
+  #content-wrapper {
+    position: relative;
+    top: 0;
+  }
+
+  #wrapper.toggled #navbar-wrapper,
+  #wrapper.toggled #content-wrapper {
+    position: relative;
+    margin-right: 250px;
+  }
+  
+    #navbar-wrapper {
+    position: sticky;
+    top: 0;
+  }
+}
+
+
+@media (max-width: 767px) {
+
+  #wrapper {
+    padding-left: 0;
+  }
+
+  #sidebar-wrapper {
+    width: 0;
+  }
+
+  #wrapper.toggled #sidebar-wrapper {
+    width: 250px;
+  }
+  #wrapper.toggled #navbar-wrapper {
+    position: absolute;
+    margin-right: -250px;
+  }
+
+  #wrapper.toggled #content-wrapper {
+    position: absolute;
+    margin-right: -250px;
+  }
+
+
+
+  #wrapper.toggled {
+    padding-left: 250px;
+  }
+
+  #content-wrapper {
+    position: relative;
+    top: 0;
+  }
+
+  #wrapper.toggled #navbar-wrapper,
+  #wrapper.toggled #content-wrapper {
+    position: sticky;
+    top:0;
+    margin-right: 250px;
+  }
+   #navbar-wrapper {
+        position: sticky;
+    top: 0;
+  }
+  
+  	* {
+  		font-size:0.75rem;
+	}
+	
+	
+	h1 {
+		font-size: 2.5rem;	
+	}
+	
+	h1 span {
+		font-size: 2.2rem;	
+	}
+	
+	h2 {
+		font-size: 2rem;
+	}
+	
+	h3 {
+		font-size: 1.7rem;
+  }
+
+	table {
+		font-size: 2.5rem;
+	}
+	
+	select, input, option {
+		font-size: 1.5rem;
+	}
+	
+	p, span, legend {
+	 font-size: 1.1rem;
+	}
+
+	
+	label {
+	font-size:0.9rem;
+	}
+	
+	small {
+		font-size: 0.9rem;
+	}
+	
+	.btn {
+		font-size: 1.3rem;
+	}
+	
+	h2 .btn, h2 .btn p {
+	font-size: 1.3rem;	
+	}
+	
+	.fa-chevron-down {
+		width: 10px;
+		min-width: 10px;	
+	}
+	
+	.planningWarning p, .planningWarning li {
+		font-size: 1.1em;
+	}
+	
+	.planningWarning ul {
+		margin: 0px;
+		padding: 10px;
+	} 
+}

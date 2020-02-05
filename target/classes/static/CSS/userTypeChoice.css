@@ -1,0 +1,22 @@
+.userTypeChoiceForm {
+	width: 50%;
+}
+
+.userTypeChoiceBtn {
+	height: 3.5rem;
+}
+
+svg{
+	width: 15%;
+}
+
+.choiceText{
+	margin-left:25%;
+}
+
+@media (max-width: 1024px) { 
+	
+	.userTypeChoiceForm {
+		width: 90%;
+	}
+}

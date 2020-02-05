@@ -1,0 +1,93 @@
+<section th:fragment="userAccountInfos" class="fluid-container pt-3 userAccountInfos" id="information">
+		<div class="container">
+	        <div class="row justify-content-center mt-2 mt-sm-3">
+	  		<hr class="col-10 col-md-12 hrBottom"/>
+        </div>
+       </div> 
+	<div class="container containerTitleStyle d-flex align-items-center">
+		<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="info-circle" class="svg-inline--fa fa-info-circle fa-w-16 col-2 mt-4 mt-lg-5 mb-5 titleSvg" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="white" d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"></path></svg>
+		<h2 class="col-9 mt-4 mt-lg-5 mb-5 text-sm-left title">Mes informations</h2>                
+	</div> 
+	<div class="container containerStyle col-11 col-lg-7 p-2 p-sm-3">  
+		<p class="row text-center justify-content-center mb-1">
+			<span class="badge badge-pill badge-warning d-inline-flex align-items-center justify-content-center yellowBadgeInfos m-4" th:unless="${connectedUser.completedUserInfos}">Informations &agrave; renseigner</span>
+			<span class="badge badge-pill badge-success d-inline-flex align-items-center justify-content-center greenBadgeInfos m-4" th:if="${connectedUser.completedUserInfos}">Profil complet</span>
+		</p>
+		<fieldset class="border text-left p-3 p-md-3 mt-2 col-12">
+			<legend class="w-auto px-1"> Informations personnelles </legend>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">Nom</p>
+				<p class="col-7 col-sm-4 my-auto" th:text="${connectedUser.lastname}"></p>											  		   
+			</div>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">Pr&eacute;nom</p>
+				<p class="col-7 col-sm-4 my-auto" th:text="${connectedUser.firstname}"></p>											  		   
+			</div>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">T&eacute;l&eacute;phone</p>
+				<p class="col-7 col-sm-4 my-auto" th:if="${connectedUser.address} != null" th:text="${connectedUser.address.phoneNumber1}"></p>
+				<p class="col-7 col-sm-4 my-auto text-danger" th:unless="${connectedUser.address} != null">Non renseign&eacute;</p>											  		   
+			</div>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">Email</p>
+				<p class="col-7 col-sm-4 my-auto" th:if="${connectedUser.email} != null" th:text="${connectedUser.email}"></p>											  		   
+			</div>
+			<div class="row p-1 mb-2">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">Image du compte</p>
+				<img th:src="${connectedUser.profilePicture}" alt="Image de profil" class="profilePictUserInfos">														  			  		   
+			</div>
+		</fieldset>
+		<fieldset th:if="(${connectedUser.userRole.wording} == 'EDITOR' OR ${connectedUser.userRole.wording} == 'SHOP') AND ${connectedUser.society} != null" class="border text-left p-3 p-md-3 mt-3 col-12">
+			<legend class="w-auto px-1"> Informations entreprise </legend>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">Nom entreprise</p>
+				<p class="col-7 col-sm-4 my-auto" th:if="${connectedUser.society.name} != null" th:text="${connectedUser.society.name}"></p>
+				<p class="col-7 col-sm-4 my-auto text-danger" th:unless="${connectedUser.society.name} != null">Non renseign&eacute;</p>
+			</div>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">Adresse</p>
+				<p class="col-7 col-sm-4 my-auto" th:if="${connectedUser.society.address?.address1} != null" th:text="${connectedUser.society.address?.address1}"></p>
+				<p class="col-7 col-sm-4 my-auto text-danger" th:unless="${connectedUser.society.address?.address1} != null">Non renseign&eacute;</p>
+			</div>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">Code postal</p>
+				<p class="col-7 col-sm-4 my-auto" th:if="${connectedUser.society.address?.postalCode} != null" th:text="${connectedUser.society.address.postalCode}"></p>									  		     	
+				<p class="col-7 col-sm-4 my-auto text-danger" th:unless="${connectedUser.society.address?.postalCode} != null">Non renseign&eacute;</p>
+			</div>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">Ville</p>
+				<p class="col-7 col-sm-4 my-auto" th:if="${connectedUser.society.address?.city} != null" th:text="${connectedUser.society.address.city}"></p>
+				<p class="col-7 col-sm-4 my-auto text-danger" th:unless="${connectedUser.society.address?.city} != null">Non renseign&eacute;</p>
+			</div>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">T&eacute;l&eacute;phone</p>
+				<p class="col-7 col-sm-4 my-auto" th:if="${connectedUser.society.address?.phoneNumber2} != null" th:text="${connectedUser.society.address.phoneNumber2}"></p>
+				<p class="badge badge-pill badge-secondary d-inline-flex align-items-center justify-content-center badgeUserInfos my-auto" th:unless="${connectedUser.society.address?.phoneNumber2} != null">Non renseign&eacute;</p>
+			</div>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">Email</p>
+				<p class="col-7 col-sm-4 my-auto" th:if="${connectedUser.society.address?.contactEmail} != null" th:text="${connectedUser.society.address?.contactEmail}"></p>
+				<p class="col-7 col-sm-4 my-auto text-danger" th:unless="${connectedUser.society.address?.contactEmail} != null">Non renseign&eacute;</p>
+			</div>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">N° de SIRET</p>
+				<p class="col-7 col-sm-4 my-auto" th:if="${connectedUser.society.siret} != null" th:text="${connectedUser.society.siret}"></p>
+				<p class="col-7 col-sm-4 my-auto text-danger" th:unless="${connectedUser.society.siret} != null">Non renseign&eacute;</p>
+			</div>
+			<div class="row p-1">
+				<p class="col-5 col-sm-4 offset-0 offset-sm-2 my-auto">N° de TVA</p>
+				<p class="col-7 col-sm-4 my-auto" th:if="${connectedUser.society.tva} != null" th:text="${connectedUser.society.tva}"></p>
+				<p class="col-7 col-sm-4 my-auto text-danger" th:unless="${connectedUser.society.tva} != null">Non renseign&eacute;</p>
+			</div>
+		</fieldset>
+		<fieldset th:if="(${connectedUser.userRole.wording} == 'EDITOR' OR ${connectedUser.userRole.wording} == 'SHOP') AND ${connectedUser.society} == null" class="border p-1 p-md-3 text-left mt-2">
+			<legend class="w-auto"> Informations entreprise </legend>
+			<div class="row justify-content-center">
+				<p class="badge badge-pill badge-secondary d-inline-flex align-items-center justify-content-center badgeUserInfos">Non renseign&eacute;</p>
+			</div>
+		</fieldset>
+		<div class="row justify-content-end text-decoration-none userAccountModifLink my-4 mt-lg-4 mb-lg-2 mr-2">
+			<a class="btn btn-primary" href="/modificationInformationPersonnelle">Modifier</a>
+		</div>
+	</div>
+</section>

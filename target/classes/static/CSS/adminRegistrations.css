@@ -1,0 +1,38 @@
+.btnCustom{
+ background-color:#ec5d31;
+ color:white;
+ font-weight: bold;
+}
+
+.btnCustom:hover{
+ background-color:#5e3388;
+ color:white;
+ font-weight: bold;
+}
+
+.btnFit {
+	max-width: 200px;
+}
+
+h4{
+  display: list-item;
+  list-style-position: inside;
+}
+
+.containerTable{
+	max-width:100vw;
+	overflow: auto;
+}
+
+.badge-search{
+	height:17px;
+	width:18px;
+}
+
+.selectTitle {
+	font-size: 1.5rem;
+}
+
+.card-header {
+	cursor:pointer;
+}

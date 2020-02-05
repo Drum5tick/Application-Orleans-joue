@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Acme&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Acme|Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../CSS/adminHome.css">
+    <title>Gestion des comptes</title>
+</head>
+
+<body>
+    <div id="wrapper">
+        <aside th:replace="adminSidebar.html :: sidebar"></aside>
+        <div th:replace="adminSidebar.html :: navbar"></div>
+
+        <section class="fluid-container pt-3" id="content-wrapper">
+
+            <h2 class="my-4">Gestion des comptes</h2>
+
+            <div class="accordion" id="accordionAccount">
+                <div class="card">
+                    <div class="card-header d-flex px-0" id="headingCreateAccount">
+                        <h2 class="mb-0 col-12 px-3">
+                             <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseCreateAccount" aria-expanded="true" aria-controls="collapseCreateAccount">
+								<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                 <p class="my-0">Initialiser un compte</p>
+                             </button>
+                         </h2>
+                    </div>
+                    <div id="collapseCreateAccount" th:class="|collapse ${(toggleCard == 'create')? 'show' : ''}|" aria-labelledby="headingCreateAccount" data-parent="#accordionAccount">
+                        <div class="card-body">
+                            <form method="post" th:action="@{/admin/createAccount}" class="col-12 col-lg-6 py-3 border">
+                                <div class="form-group d-flex flex-column">
+                                    <label for="role">Type de compte</label>
+                                    <select id="role" class="w-auto col-12 col-sm-4" name="userRole">
+                                        <option th:each="role : ${userRoles}" th:value="${role.id}">
+                                            <th:block th:switch="${role.id}">
+                                                <span th:case="'1'">Administrateur</span>
+                                                <span th:case="'2'">Editeur</span>
+                                                <span th:case="'3'">Boutique</span>
+                                                <span th:case="'4'">Bénévole</span>
+                                                <span th:case="'5'">Protozone</span>
+                                            </th:block>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="row form-group flex-column flex-sm-row">
+                                    <div class="col">
+                                        <label for="user_lastname">Nom</label>
+                                        <input type="text" id="user_lastname" name="lastname" class="form-control" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="user_firstname">Prénom</label>
+                                        <input type="text" id="user_firstname" name="firstname" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="row form-group flex-column flex-sm-row">
+                                    <div class="col">
+                                        <label for="user_email">Email</label>
+                                        <input type="email" id="user_email" name="email" class="form-control" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="user_password">Mot de passe</label>
+                                        <input type="password" id="user_password" name="password" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center">
+                                    <button type="submit" class="btn btn-primary">Créer un compte</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex px-0" id="headingAdminAccount">
+                        <h2 class="mb-0 col-12 px-3">
+                             <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseAdminAccount" aria-expanded="true" aria-controls="collapseAdminAccount">
+								<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                 <p class="my-0">Gestion des comptes administrateurs</p>
+                             </button>
+                         </h2>
+                    </div>
+                    <div id="collapseAdminAccount" th:class="|collapse ${(toggleCard == 'admin')? 'show' : ''}|" aria-labelledby="headingAdminAccount" data-parent="#accordionAccount">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Nom</th>
+                                        <th scope="col">État du compte</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="adminAccount : ${adminAccounts}">
+                                        <th scope="row" th:text="${adminAccount.id}">1</th>
+                                        <td th:text="|${adminAccount.lastname} ${adminAccount.firstname}|">Otto</td>
+                                        <td th:text="${adminAccount.accountActive? 'ACTIF' : 'DÉSACTIVÉ'}"></td>
+                                        <td class="d-flex justify-content-end align-items-center">
+                                            <form method="post" th:action="@{/admin/selectAccount}" class="m-0 p-0">
+                                                <input type="hidden" name="accountId" th:value="${adminAccount.id}">
+                                                <input type="hidden" name="toggleCard" value="admin">
+                                                <button class="svg-btn" type="submit" data-toggle="collapse" data-target="#collapseUpdateEvent" aria-expanded="false" aria-controls="collapseUpdateEvent">
+                                                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                        <path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                            <form method="post" th:action="@{/admin/deleteAccount}">
+                                                <input type="hidden" name="accountId" th:value="${adminAccount.id}">
+                                                <input type="hidden" name="toggleCard" value="admin">
+                                                <button type="submit" class="btn" onclick="return confirm('Etes-vous sûrs de vouloir supprimer ce compte ? Il sera définitivement effacé de la base de donnée !');">
+                                                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                        <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex px-0" id="headingEditorAccount">
+                        <h2 class="mb-0 col-12 px-3">
+                             <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseEditorAccount" aria-expanded="true" aria-controls="collapseEditorAccount">
+								<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                 <p class="my-0">Gestion des comptes éditeurs</p>
+                             </button>
+                         </h2>
+                    </div>
+                    <div id="collapseEditorAccount" th:class="|collapse ${(toggleCard == 'editor')? 'show' : ''}|" aria-labelledby="headingEditorAccount" data-parent="#accordionAccount">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Nom</th>
+                                        <th scope="col">Nom de la société</th>
+                                        <th scope="col">État du compte</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="editorAccount : ${editorAccounts}">
+                                        <th scope="row" th:text="${editorAccount.id}">1</th>
+                                        <td th:text="|${editorAccount.lastname} ${editorAccount.firstname}|">Otto</td>
+                                        <td th:if="${editorAccount.society} != null" th:text="${editorAccount.society.name}"></td>
+                                        <td class="text-danger" th:unless="${editorAccount.society} != null"> aucune société inscrite</td>
+                                        <td th:text="${editorAccount.accountActive? 'ACTIF' : 'DÉSACTIVÉ'}"></td>
+                                        <td class="d-flex justify-content-end align-items-center">
+                                            <form method="post" th:action="@{/admin/selectAccount}" class="m-0 p-0">
+                                                <input type="hidden" name="accountId" th:value="${editorAccount.id}">
+                                                <input type="hidden" name="toggleCard" value="editor">
+                                                <button class="svg-btn" type="submit" data-toggle="collapse" data-target="#collapseUpdateEvent" aria-expanded="false" aria-controls="collapseUpdateEvent">
+                                                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                        <path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                            <form method="post" th:action="@{/admin/deleteAccount}">
+                                                <input type="hidden" name="accountId" th:value="${editorAccount.id}">
+                                                <input type="hidden" name="toggleCard" value="editor">
+                                                <button type="submit" class="btn" onclick="return confirm('Etes-vous sûrs de vouloir supprimer ce compte ? Il sera définitivement effacé de la base de donnée !');">
+                                                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                        <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex px-0" id="headingShopAccount">
+                        <h2 class="mb-0 col-12 px-3">
+                             <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseShopAccount" aria-expanded="true" aria-controls="collapseShopAccount">
+								<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                 <p class="my-0">Gestion des comptes boutiques</p>
+                             </button>
+                         </h2>
+                    </div>
+                    <div id="collapseShopAccount" th:class="|collapse ${(toggleCard == 'shop')? 'show' : ''}|" aria-labelledby="headingShopAccount" data-parent="#accordionAccount">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Nom</th>
+                                        <th scope="col">Nom de la boutique</th>
+                                        <th scope="col">État du compte</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="shopAccount : ${shopAccounts}">
+                                        <th scope="row" th:text="${shopAccount.id}">1</th>
+                                        <td th:text="|${shopAccount.lastname} ${shopAccount.firstname}|">Otto</td>
+                                        <td th:text="${shopAccount.society?.name}"></td>
+                                        <td th:text="${shopAccount.accountActive? 'ACTIF' : 'DÉSACTIVÉ'}"></td>
+                                        <td class="d-flex justify-content-end align-items-center">
+                                            <form method="post" th:action="@{/admin/selectAccount}" class="m-0 p-0">
+                                                <input type="hidden" name="accountId" th:value="${shopAccount.id}">
+                                                <input type="hidden" name="toggleCard" value="shop">
+                                                <button class="svg-btn" type="submit" data-toggle="collapse" data-target="#collapseUpdateEvent" aria-expanded="false" aria-controls="collapseUpdateEvent">
+                                                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                        <path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                            <form method="post" th:action="@{/admin/deleteAccount}">
+                                                <input type="hidden" name="accountId" th:value="${shopAccount.id}">
+                                                <input type="hidden" name="toggleCard" value="shop">
+                                                <button type="submit" class="btn" onclick="return confirm('Etes-vous sûrs de vouloir supprimer ce compte ? Il sera définitivement effacé de la base de donnée !');">
+                                                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                        <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header d-flex px-0" id="headingVolunteerAccount">
+                        <h2 class="mb-0 col-12 px-3">
+                             <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseVolunteerAccount" aria-expanded="true" aria-controls="collapseVolunteerAccount">
+								<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                 <p class="my-0">Gestion des comptes bénévoles</p>
+                             </button>
+                         </h2>
+                    </div>
+                    <div id="collapseVolunteerAccount" th:class="|collapse ${(toggleCard == 'volunteer')? 'show' : ''}|" aria-labelledby="headingVolunteerAccount" data-parent="#accordionAccount">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Nom</th>
+                                        <th scope="col">État du compte</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="volunteerAccount : ${volunteerAccounts}">
+                                        <th scope="row" th:text="${volunteerAccount.id}">1</th>
+                                        <td th:text="|${volunteerAccount.lastname} ${volunteerAccount.firstname}|">Otto</td>
+                                        <td th:text="${volunteerAccount.accountActive? 'ACTIF' : 'DÉSACTIVÉ'}"></td>
+                                        <td class="d-flex justify-content-end align-items-center">
+                                            <form method="post" th:action="@{/admin/selectAccount}" class="m-0 p-0">
+                                                <input type="hidden" name="accountId" th:value="${volunteerAccount.id}">
+                                                <input type="hidden" name="toggleCard" value="volunteer">
+                                                <button class="svg-btn" type="submit" data-toggle="collapse" data-target="#collapseUpdateEvent" aria-expanded="false" aria-controls="collapseUpdateEvent">
+                                                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                        <path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                            <form method="post" th:action="@{/admin/deleteAccount}">
+                                                <input type="hidden" name="accountId" th:value="${volunteerAccount.id}">
+                                                <input type="hidden" name="toggleCard" value="volunteer">
+                                                <button type="submit" class="btn" onclick="return confirm('Etes-vous sûrs de vouloir supprimer ce compte ? Il sera définitivement effacé de la base de donnée !');">
+                                                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                        <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header d-flex px-0" id="headingProtozoneAccount">
+                        <h2 class="mb-0 col-12 px-3">
+                             <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseProtozoneAccount" aria-expanded="true" aria-controls="collapseProtozoneAccount">
+								<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                 <p class="my-0">Gestion des comptes protozone</p>
+                             </button>
+                         </h2>
+                    </div>
+                    <div id="collapseProtozoneAccount" th:class="|collapse ${(toggleCard == 'protozone')? 'show' : ''}|" aria-labelledby="headingProtozoneAccount" data-parent="#accordionAccount">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Nom</th>
+                                        <th scope="col">État du compte</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="protozoneAccount : ${protozoneAccounts}">
+                                        <th scope="row" th:text="${protozoneAccount.id}">1</th>
+                                        <td th:text="|${protozoneAccount.lastname} ${protozoneAccount.firstname}|">Otto</td>
+                                        <td th:text="${protozoneAccount.accountActive? 'ACTIF' : 'DÉSACTIVÉ'}"></td>
+                                        <td class="d-flex justify-content-end align-items-center">
+                                            <form method="post" th:action="@{/admin/selectAccount}" class="m-0 p-0">
+                                                <input type="hidden" name="accountId" th:value="${protozoneAccount.id}">
+                                                <input type="hidden" name="toggleCard" value="protozone">
+                                                <button class="svg-btn" type="submit" data-toggle="collapse" data-target="#collapseUpdateEvent" aria-expanded="false" aria-controls="collapseUpdateEvent">
+                                                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                        <path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                            <form method="post" th:action="@{/admin/deleteAccount}">
+                                                <input type="hidden" name="accountId" th:value="${protozoneAccount.id}">
+                                                <input type="hidden" name="toggleCard" value="protozone">
+                                                <button type="submit" class="btn" onclick="return confirm('Etes-vous sûrs de vouloir supprimer ce compte ? Il sera définitivement effacé de la base de donnée !');">
+                                                    <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                        <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>              
+                
+                 <div class="card">
+                    <div class="card-header d-flex px-0" id="headingSearchAccount">
+                        <h2 class="mb-0 col-12 px-3">
+                             <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseSearchAccount" aria-expanded="true" aria-controls="collapseSearchAccount">
+								<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                 <p class="my-0">Rechercher un compte</p>
+                             </button>
+                         </h2>
+                    </div>
+                    <div id="collapseSearchAccount" th:class="|collapse ${(toggleCard == 'search')? 'show' : ''}|" aria-labelledby="headingSearchAccount" data-parent="#accordionAccount">
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <form method="post" th:action="@{/admin/searchAccountByUserName}">
+                                    <div class="form-group">
+                                        <label for="searchUser">Rechercher un utilisateur par nom ou prénom ou société</label>
+                                        <input type="search" name="userName" class="form-control col-12 col-sm-6" id="searchUser">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Lancer la recherche</button>
+                                </form>
+                            </div>
+                            <div th:if="${foundedUsers != null and foundedUsers != 'none'}">
+                                <h3 class="my-3">Résultat de votre recherche</h3>
+                                <table class="table">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Nom</th>
+                                            <th scope="col">Type compte</th>
+                                            <th scope="col">Nom de la société</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="user : ${foundedUsers}">
+                                            <th scope="row" th:text="${user.id}">1</th>
+                                            <td th:text="|${user.lastname} ${user.firstname}|">Otto</td>
+                                            <td th:switch="${user.userRole.id}">
+                                                <span th:case="'1'">Administrateur</span>
+                                                <span th:case="'2'">Editeur</span>
+                                                <span th:case="'3'">Boutique</span>
+                                                <span th:case="'4'">Bénévole</span>
+                                                <span th:case="'5'">Protozone</span>
+                                            </td>
+                                            <td th:if="${user.society} != null" th:text="${user.society.name}"></td>
+                                            <td th:unless="${user.society} != null" class="text-danger">Pas de société</td>
+                                            <td class="d-flex justify-content-end align-items-center">
+                                                <form method="post" th:action="@{/admin/selectAccount}" class="m-0 p-0">
+                                                    <input type="hidden" name="accountId" th:value="${user.id}">
+                                                    <input type="hidden" name="toggleCard" value="search">
+                                                    <button class="svg-btn" type="submit" data-toggle="collapse" data-target="#collapseUpdateEvent" aria-expanded="false" aria-controls="collapseUpdateEvent">
+                                                        <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                            <path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path>
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                                <form method="post" th:action="@{/admin/deleteAccount}">
+                                                    <input type="hidden" name="accountId" th:value="${user.id}">
+                                                    <input type="hidden" name="savedSearch" th:value="${savedSearch}">
+                                                    <input type="hidden" name="toggleCard" value="search">
+                                                    <button type="submit" class="btn" onclick="return confirm('Etes-vous sûrs de vouloir supprimer ce compte ? Il sera définitivement effacé de la base de donnée !');">
+                                                        <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                            <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+                                                        </svg>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div th:if="${foundedUsers == 'none'}">
+                                <p class="mt-4 text-danger">Aucun compte ne correspond à votre recherche</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" th:if="${selectedAccount != null}">
+                    <div class="card-header d-flex px-0" id="headingUpdateAccount">
+                        <h2 class="mb-0 col-12 px-3">
+                             <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseUpdateAccount" aria-expanded="true" aria-controls="collapseUpdateAccount">
+								<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                 <p class="my-0">Edition du compte sélectionné</p>
+                             </button>
+                         </h2>
+                    </div>
+                    <div id="collapseUpdateAccount" th:class="|collapse ${(toggleCard == 'edit')? 'show' : ''}|" aria-labelledby="headingUpdateAccount" data-parent="#accordionAccount">
+                        <div class="card-body" th:object="${selectedAccount}">
+                            <form method="post" th:action="@{/admin/updateAccount}" enctype="multipart/form-data">
+                                <div class="d-flex flex-wrap">
+                                    <input type="hidden" name="id" th:field="*{id}">
+                                    <th:block th:switch="*{userRole.id}">
+									    <input th:case="'1'" type="hidden" name="toggleCard" value="admin"/>
+									    <input th:case="'2'" type="hidden" name="toggleCard" value="editor"/>
+									    <input th:case="'3'" type="hidden" name="toggleCard" value="shop"/>
+									    <input th:case="'4'" type="hidden" name="toggleCard" value="volunteer"/>
+									    <input th:case="'5'" type="hidden" name="toggleCard" value="protozone"/>
+									</th:block>
+                                    <div class="col-12 col-xl-6 py-3 border">
+                                        <h3 class="mb-4">Modifier les informations personnelles</h3>
+                                        <div class="form-group d-flex flex-column">
+                                            <p th:switch="*{userRole.id}">Type de compte :
+                                                <span th:case="'1'">Administrateur</span>
+                                                <span th:case="'2'">Editeur</span>
+                                                <span th:case="'3'">Boutique</span>
+                                                <span th:case="'4'">Bénévole</span>
+                                                <span th:case="'5'">Protozone</span>
+                                            </p>
+                                        </div>
+                                        <div class="row form-group flex-column flex-sm-row">
+                                            <div class="col">
+                                                <label for="user_lastname_update">Nom<span class="requiredField"> *</span></label>
+                                                <input type="text" id="user_lastname_update" class="form-control" th:field="*{lastname}" required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="user_firstname_update">Prénom<span class="requiredField"> *</span></label>
+                                                <input type="text" id="user_firstname_update" class="form-control" th:field="*{firstname}" required>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group flex-column flex-sm-row">
+                                            <div class="col">
+                                                <label for="user_email_update">Email<span class="requiredField"> *</span></label>
+                                                <input type="email" id="user_email_update" name="email" class="form-control" th:field="*{email}" required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="user_password_update">Mot de passe</label>
+                                                <input type="password" id="user_password_update" name="password" pattern=".{8,}" title="8 charactères minimum" class="form-control" th:field="*{password}">
+                                            </div>
+                                        </div>
+                                        <div class="row form-group flex-column flex-sm-row">
+                                            <div class="col">
+                                                <label for="user_tel_update">Téléphone</label>
+                                                <input type="tel" class="form-control" id="user_tel_update" pattern="(0|\\+33|0033)[1-9][0-9]{8}" th:field="*{address.phoneNumber1}">
+                                            </div>
+                                            <div class="col d-flex align-items-end justify-content-start">
+	                                            <div class="form-check">
+												    <input type="checkbox" class="form-check-input" id="user_active" name="accountActive" th:checked="*{accountActive}">
+												    <label class="form-check-label" for="user_active">Compte actif</label>
+												  </div>
+                                            </div>                                            
+                                        </div>
+                                        <div class="row form-group">
+                                            <div class="col">
+                                                <p>Image du profil</p>
+                                                <div class="d-flex flex-wrap border rounded p-3">
+                                                    <div class="col-12 col-sm-3">
+                                                        <img id="imagePreview" class="profilePict" th:src="*{profilePicture}" alt="Image du profil utilisateur">
+                                                    </div>
+                                                    <div class="col d-flex flex-column justify-content-center">
+                                                        <label for="filePicture" class="mt-4">Changer image</label>
+                                                        <input type="file" id="filePicture" name="filePicture">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-xl-6 py-3 mt-3 mt-md-0 border" th:if="${selectedAccount.userRole.wording == 'SHOP' or selectedAccount.userRole.wording == 'EDITOR'}">
+                                        <h3 class="mb-4">Modifer les informations de la société</h3>
+                                        <div class="row form-group flex-column flex-sm-row">
+                                            <div class="col">
+                                                <label for="society_name">Nom de la société<span class="requiredField"> *</span></label>
+                                                <input type="text" id="society_name" class="form-control" th:field="*{society.name}" required>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group flex-column flex-sm-row">
+                                            <div class="col">
+                                                <label for="society_address">Adresse<span class="requiredField"> *</span></label>
+                                                <input type="text" id="society_address" class="form-control" th:field="*{society.address.address1}" required>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group flex-column flex-sm-row">
+                                            <div class="col">
+                                                <label for="society_postal">Code postal<span class="requiredField"> *</span></label>
+                                                <input type="text" id="society_postal" class="form-control" th:field="*{society.address.postalCode}" required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="society_city">Ville<span class="requiredField"> *</span></label>
+                                                <input type="text" id="society_city" class="form-control" th:field="*{society.address.city}" required>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group flex-column flex-sm-row">
+                                            <div class="col">
+                                                <label for="society_email">Email</label>
+                                                <input type="email" class="form-control" id="society_email" th:field="*{society.address.contactEmail}">
+                                            </div>
+                                            <div class="col">
+                                                <label for="society_tel">Téléphone</label>
+                                                <input type="tel" class="form-control" id="society_tel" pattern="(0|\\+33|0033)[1-9][0-9]{8}" th:field="*{society.address.phoneNumber2}" required>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group flex-column flex-sm-row">
+                                            <div class="col">
+                                                <label for="society_siret">N° de SIRET</label>
+                                                <input type="text" class="form-control" id="society_siret" th:field="*{society.siret}" required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="society_tva">N° de TVA</label>
+                                                <input type="text" class="form-control" id="society_tva" th:field="*{society.tva}" required>
+                                            </div>
+                                        </div>
+                                        <p class="text-right pr-4 ml-auto mr-4 mt-2"><span class="requiredField">*</span> Champs obligatoires</p>
+                                    </div>
+                                </div>
+                                <div th:class="|d-flex justify-content-center ${(selectedAccount.userRole.wording == 'SHOP' or selectedAccount.userRole.wording == 'EDITOR')? 'col-12 mx-auto' : 'col-6 mx-0'}|">
+                                    <button type="submit" class="btn btn-primary mx-3 mb-0 mt-3">Valider</button>
+                                    <a class="btn btn-primary mx-3 mb-0 mt-3" href="/admin/closeAllAccountSection">Annuler</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script type="text/javascript" src="../JS/adminHome.js"></script>
+
+</html>

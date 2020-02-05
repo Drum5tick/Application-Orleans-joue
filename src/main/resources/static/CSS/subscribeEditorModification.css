@@ -1,0 +1,236 @@
+.subscribeEditorModification h1 {
+	margin-bottom: 0;
+}
+
+.table td {
+	vertical-align: middle!important;
+}
+
+.card-body-custom{
+	padding:0;
+	text-align:center;
+}
+
+.card-text-custom{
+	margin-top:0.5rem;
+	margin-bottom:0;	
+}
+
+.buttonP{
+	margin:0;
+}
+
+.imgContainerCustom{
+	height:150px;
+	width: auto;
+}
+
+.card-img-custom{
+	height:auto;
+	max-height:80%;
+	width: auto;
+	max-width: 80%;
+    object-fit: cover;
+    position:center;
+    cursor:pointer;
+	fill:var(--update);
+}
+
+.card-custom{
+	background-color: white;
+	border-color: var(--purple);
+	padding:0;
+	
+}
+
+
+.registration_cost {
+	font-size: 1.6rem;
+}
+
+.deleteUpdateSVG{
+	width: 3rem;
+	cursor:pointer;
+	fill:var(--gray);
+	border: none;
+}
+
+.deleteSVG{
+
+	fill:var(--gray);
+}
+
+.deleteSVG:first-child:hover{
+
+	fill:var(--danger);
+}
+
+.deleteUpdateSVG:last-child:hover{
+	fill:var(--update);
+}
+
+.previewImg{
+	width:50%;
+	margin:0 auto;
+}
+
+.svgAddAgent{
+	fill:var(--update);
+	cursor:pointer;
+	height: 20px;
+}
+
+.SvgAddGame{
+	width:200px;
+	height:700px;
+	margin:auto;
+}
+
+.addCardCustom{
+	min-height:150px;
+}
+
+.deleteButton{
+	background: none;
+    border: none;
+    padding: 0;
+}
+
+.btn {
+	margin-top: 0;
+	font-size: 1.2rem;
+    margin-left: 0!important; 
+}
+
+.btn-update {
+    align-self: center;
+}
+
+
+.svgActionAgent{
+	background: none;
+	border: none;
+	fill:orange;
+	cursor:pointer;
+}
+
+.svgActionAgentDelete{
+	background: none;
+	border: none;
+	fill:var(--danger);
+	cursor:pointer;
+}
+
+.agentSVG {
+	height: 35px;
+}
+
+.theadAgent{
+	background: var(--orange);
+	color: white;
+}
+
+.theadAgent th, .theadAgent td{
+	width:20%;
+}
+
+.table_error {
+    color: var(--danger);
+    font-style: italic;
+}
+
+.returnBtn {
+	width: 100%;
+}
+
+.editRegPageBackLink{
+	z-index: 1;
+	position: sticky;
+	top: 95px;
+}
+
+.modifInfosForm {
+	border: 1px solid var(--purple);
+	border-radius: 4px;
+	background-color: white;
+}
+
+.tableAboveText {
+	color: white;
+}
+
+.returnBtn {
+	position: fixed;
+	top:100px;
+	left:16px;
+	width:140px;
+	z-index: 20;
+}
+	
+.agentInputs {
+	height: 2.8rem;
+	font-size: 1.4rem;
+}
+
+.customTr {
+	font-size: 1.2rem;
+	vertical-align: middle!important;
+}	
+
+.card-header-custom {
+	width: 100%;
+}
+
+.custom-form {
+	width: 100%;
+}	
+
+.smallText {
+		font-size: 1rem;
+	}
+
+.inputFile input{
+	font-size:1.2rem;
+	margin-left:2%;
+}
+
+@media screen and (min-width: 987px){
+	
+	.editRegPageBackLink{
+		margin-top: 0px;
+	}
+}
+
+@media screen and (max-width: 768px){	
+	
+	
+	.registration_cost {
+		font-size: 1rem;
+	}
+	
+	.smallText {
+		font-size: 1rem;
+	}
+	
+	.pictureSelectBtn {
+		font-size: 1.2rem;
+	}
+	
+	.modalTitle {
+		font-size: 2rem;
+	}
+	
+	.requiredField {
+		font-size: 1.2rem;
+	}
+	
+	.requiredFieldInfo {
+		font-size: 1.2rem;
+	}
+	
+	.imgContainerCustom {
+		height: 100px;
+	}
+}
+
+

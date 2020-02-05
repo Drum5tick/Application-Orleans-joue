@@ -1,0 +1,74 @@
+<div class="modal fade" th:each="game: ${gamesRegistration}" th:id="|form-${game.id}|" id="editGameModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" th:fragment="modaleModification">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <h3 class="modal-title modalTitle" id="exampleModalLabel">Modification du jeu</h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form method="POST" th:action="@{/modifyGame#games}" enctype="multipart/form-data">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="name">Nom du jeu</label>
+            <input type="text" class="form-control" id="name" name="name" aria-describedby="nameGameHelp" th:value="${game.name}" required>
+            <input type="hidden" name="registrationId" th:value="${registration.id}">
+            <input type="hidden" name="id" th:value="${game.id}">
+            <small id="nameGameHelp" class="form-text text-muted smallText">Indiquez le nom du jeu</small>
+          </div>
+          <div class="form-group inputFile">
+            <label for="picture">Image (5 Mo max)</label>
+			<input type="file" id="picture" th:class="${game.id}" name="filePicture" class="pictureSelectBtn" aria-describedby="pictureHelp" accept="image/png, image/jpeg">
+			<input type="hidden" name="picture" value="">
+			<img th:id="|picturePreview${game.id}|" th:if="${game.picture}!=null" th:src="${game.picture}" th:onerror="|this.onerror=null;this.src='@{${connectedUser.getProfilePicture()}}';|" alt="your image" class="d-block previewImg"/>            
+			<img th:id="|picturePreview${game.id}|" th:unless="${game.picture}!=null" th:src="${connectedUser.profilePicture}" alt="your image" class="d-block previewImg"/>
+          </div>        
+          <div class="form-group">
+            <label for="author">Auteur</label>
+            <input type="text" class="form-control" id="author" name="author" aria-describedby="authorHelp" th:value="${game.author}">
+            <small id="authorHelp" class="form-text text-muted smallText">Indiquez l'auteur du jeu</small>
+          </div>
+          <div class="form-group">
+            <label for="editor">Éditeur</label>
+            <input type="text" class="form-control" id="editor" name="editor" aria-describedby="editorHelp" th:value="${game.editor}">
+            <small id="editorHelp" class="form-text text-muted smallText">Indiquez l'éditeur du jeu</small>
+          </div>
+          <div class="form-group">
+            <label for="distributor">Distributeur</label>
+            <input type="text" class="form-control" id="distributor" name="distributor" aria-describedby="distributorHelp" th:value="${game.distributor}">
+            <small id="distributorHelp" class="form-text text-muted smallText">Indiquez le distributeur du jeu</small>
+          </div>
+          <div class="form-group">
+            <label for="publicationDate">Date de publication</label>
+            <input type="date" class="form-control" id="publicationDate" name="publicationDate" aria-describedby="dateHelp" th:value="${#dates.format(game.publicationDate, 'yyyy-MM-dd')}">            																												
+          	<small id="dateHelp" class="form-text text-muted smallText">Indiquez la date de publication du jeu</small>
+          </div>
+          <div class="form-group">
+            <label for="category">Catégorie de jeux</label>
+            <input type="text" class="form-control" id="category" name="category" aria-describedby="categoryHelp" th:value="${game.category}">
+            <small id="categoryHelp" class="form-text text-muted smallText">Indiquez la catégorie du jeux (jeux de rôle, jeux de coopération...)</small>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea rows="5" cols="40" class="form-control" id="description" aria-describedby="descriptionHelp" name="description" th:text="${game.description}"></textarea>
+          	<small id="descriptionHelp" class="form-text text-muted smallText">Indiquez la description du jeu</small>
+          </div>
+          <div class="form-group">
+            <label for="webLink">URL</label>
+            <input type="URL" class="form-control" id="url" name="webLink" aria-describedby="linkHelp" th:value="${game.webLink}">
+            <small id="linkHelp" class="form-text text-muted smallText">Lien du jeu (optionnel)</small>
+          </div>
+          <div class="form-group">
+            <label for="price">Prix</label>
+            <input type="number" class="form-control" id="price" name="price" aria-describedby="priceHelp" th:value="${game.price}">
+            <small id="priceHelp" class="form-text text-muted smallText">Prix (indicatif)</small>
+          </div>
+        </div>
+        <div class="modal-footer border-top-0 d-flex justify-content-center">
+          <button type="submit" class="btn btn-success">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

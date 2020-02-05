@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.wildcodeschool.festivalorleansjoue.Sept2019JavaOrleansFestivalOrleansJoueApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 13.521 s - in com.wildcodeschool.festivalorleansjoue.Sept2019JavaOrleansFestivalOrleansJoueApplicationTests

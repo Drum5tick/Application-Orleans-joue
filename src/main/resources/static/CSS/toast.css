@@ -1,0 +1,68 @@
+.toastCustom-container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+[class*="toastCustom-pos-"] {
+  position: absolute;
+  padding: 10px;
+}
+
+.toastCustom-pos-top {
+  top: 5rem;
+}
+
+.toastCustom-pos-right {
+  right: 0;
+}
+
+.toastCustom-pos-bottom {
+  bottom: 0;
+}
+
+.toastCustom-pos-left {
+  left: 0;
+}
+
+.toastCustom {
+  display: none;
+  padding: 20px;
+  margin: 20px 0;
+  color: white;
+}
+
+.close-toastCustom {
+	margin-left:100%;
+	text-decoration: none;
+	color: #ffffff;
+	vertical-align: middle;
+}
+
+.toastCustom p{
+	margin:0;
+}
+
+.toastOk{
+	background-color: #4e9a06;
+}
+
+.toastKo{
+	background-color: #EC5D31;
+}
+
+.toastSVG{
+	width:2rem;
+	fill:white;
+	margin-right:1rem;
+}
+
+.toastContent{
+	display:flex;
+	flex-direction:row;
+	justify-content: space-between;
+	align-items:center;
+}
+
+.toastContent p{
+	margin-right:auto;
+}

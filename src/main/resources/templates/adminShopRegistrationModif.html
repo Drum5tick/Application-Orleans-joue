@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Acme&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Acme|Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../CSS/adminEditorRegistrationModif.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/adminHome.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/toast.css">
+    <title>Modification des inscriptions éditeurs</title>
+    <script>
+        var toastMsg = "[[${toastMsg}]]";
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <aside th:replace="adminSidebar.html :: sidebar"></aside>
+        <div th:replace="adminSidebar.html :: navbar"></div>
+        <section id="content-wrapper">
+            <div class="row d-flex justify-content-between flex-wrap">
+                <div class="col">
+                    <h2 class="content-title mt-3 mb-4" th:text="|Modification de l'inscription de la boutique : ${registration.society.name}|">Gestion des inscriptions des éditeurs</h2>
+                </div>
+                <form class="d-flex align-items-center " th:action="@{/admin/gestionDesInscriptions/boutiques}">
+                	<input type="hidden" name="eventId" th:value="${registration.event.id}">
+                	<button type="submit" class="btn btnCustom m-3">Retour</button>
+                </form>
+            </div>
+            
+            <div class="accordion" id="accordionUpdateRegistration">
+
+	            <div class="card">
+	                <div class="card-header" id="headingInfo">
+	                    <h2 class="mb-0">
+	                        <a href="#collapseInfo" class="btn btn-link" data-toggle="collapse" aria-expanded="false" aria-controls="collapseInfo">
+	                            Informations générales
+	                        </a>
+	                    </h2>
+	                </div>
+	                <div id="collapseInfo" class="collapse show" aria-labelledby="headingInfo" data-parent="#accordionUpdateRegistration">
+	                    <div class="card-body">
+	                     <form class="row" method="post" th:action="@{/admin/saveModifiedShopReg}" th:object="${registration}">
+	                     <div class="card-body row justify-content-around">
+	                         <div class="col-12 col-lg-4 justify-content-center mx-auto">
+	                             <label class="col-10" for="electricalSupplyNeed">Besoin d'un raccord au réseau éléctrique</label>
+	                             <input type="checkbox" id="electricalSupplyNeed" name="electricalSupplyNeed" th:checked="*{electricalSupplyNeed}">
+	                             <label class="col-10" for="agent">Présence de collaborateur(s)</label>
+	                             <input type="checkbox" id="agent" name="agentProvided" th:checked="*{agentProvided}">
+	                             <label class="col-8" for="tablesQuantity">Nombre de tables demandées</label>
+	                             <input class="col-3" type="text" id="tablesQuantity" name="tablesQuantity" th:field="*{tablesQuantity}" />
+	                             <label class="col-8 col-lg-8" for="registrationCost">Coût de l'inscription (€)</label>
+	                             <input class="col-3" type="text" id="registrationCost" name="registrationCost" th:field="*{registrationCost}" />
+	                         </div>
+	                         <div class="col-12 col-lg-6 justify-content-center mx-auto">
+	                             <label class="col-12 p-0" for="comments">Commentaires</label>
+	                             <textarea class="mx-auto col-12 textArea p-2" rows="6" cols="40" name="comments" th:field="*{comments}"></textarea>
+	                         </div>
+	                     </div>
+	                     <input type="submit" class="btn btnCustom mx-auto my-3" value="Sauvegarder les changements">
+	                     <input type="hidden" th:value="${registration.id}" name="registrationId">
+	                 </form>
+	                </div>
+	            </div>
+	           </div>	
+	            <div class="card">
+	                <div class="card-header" id="headingAgent">
+	                    <h2 class="mb-0">
+	                        <a href="#collapseAgent" class="btn btn-link" data-toggle="collapse" aria-expanded="false" aria-controls="collapseAgent">
+	                            Liste des collaborateurs inscrits
+	                        </a>
+	                    </h2>
+	                </div>
+	                <div id="collapseAgent" class="collapse show" aria-labelledby="headingAgent" data-parent="#accordionUpdateRegistration">
+	                    <div class="card-body overflow-auto">
+	                    	<table class="table">
+                               <thead class="thead-dark">
+                                   <tr>
+                                       <th scope="col">Prénom</th>
+                                       <th scope="col">Nom</th>
+                                       <th scope="col">Téléphone</th>
+                                       <th scope="col">Email</th>
+                                   </tr>
+                               </thead>
+                               <tbody>
+                                   <tr th:each="agent : ${agents}">
+                                       <th th:text="${agent.firstname}"></th>
+                                       <td th:text="${agent.lastname}"></td>
+                                       <td th:text="${agent.phone}"></td>
+                                       <td th:text="${agent.email}"></td>
+
+                                   </tr>
+                               </tbody>
+                           </table>
+                           <div th:if="${selectedAgent != null or selectedAgent == 'none'}" th:object="${selectedAgent}" id="">
+                           	   <hr class="mt-5"/>
+	                           <h3 class="mt-2 mb-3" th:text="|Modification des informations de *{firstname} *{lastname}|"></h3>
+								<form method="post" class="card-header row bg-dark customCardHeader justify-content-around mx-auto" th:action="@{/admin/saveModifiedShopAgent}" >
+									<input type="text" class="col-2 my-auto" th:field="*{firstname}">
+									<input type="text" class="col-2 my-auto" th:field="*{lastname}">
+									<input type="text" class="col-2 my-auto" th:field="*{phone}">
+									<input type="text" class="col-2 my-auto" th:field="*{email}">
+									<div class="col-4 row justify-content-end">
+										<input type="submit" class="btn btnCustom mx-1 my-1" value="Valider">
+			                        </div>	
+			                        <input type="hidden" th:value="${registrationId}" name="registrationId">
+									<input type="hidden" th:value="${selectedAgent.id}" name="agentId">
+								</form>
+                           </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+        </section>
+    </div>
+    <div th:replace="toasts :: toats"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script type="text/javascript" src="../JS/adminHome.js"></script>
+<script type="text/javascript" src="../JS/main.js"></script>
+
+</html>

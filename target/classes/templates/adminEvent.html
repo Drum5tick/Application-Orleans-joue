@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Acme&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Acme|Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../CSS/adminHome.css">
+    <link rel="stylesheet" type="text/css" href="../CSS/adminEvent.css">
+    <title>Gestion des évènements</title>
+</head>
+<body class="adminEvent">
+    <div id="wrapper">
+        <aside th:replace="adminSidebar.html :: sidebar"></aside>
+        <div th:replace="adminSidebar.html :: navbar"></div>
+        <section id="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="content-title mt-3 mb-4">Gestion des évènements</h2>
+                    <div class="accordion" id="accordionEventCrud">
+                        <div class="card">
+                            <div class="card-header d-flex px-0" id="headingCreateEvent">                                
+                                <h2 class="mb-0 col-12 px-3">
+                                    <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseCreateEvent" aria-expanded="true" aria-controls="collapseCreateEvent">
+ 										<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                        <p class="my-0">Création d'un nouvel évènement</p>
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapseCreateEvent" class="collapse" aria-labelledby="headingCreateEvent" data-parent="#accordionEventCrud">
+                                <div class="card-body">
+                                <h3 class="content-title mt-2 mb-4">Créer un nouvel évènement</h3>
+                                    <form method="post" th:action="@{/admin/addEvent}" class="p-3 border">
+	                                    <div class="row d-flex flex-row">
+		                                   	 <div class="col-12 col-sm-6">
+		                                    	<fieldset>
+		                                    		<legend>Nom de l'évènement</legend>
+			                                        <div class="form-group ">
+			                                            <input type="text" name="name" class="form-control" id="name" required>
+			                                        </div>
+		                                    	</fieldset>
+		                                    	<fieldset>
+		                                        	<legend>Description</legend>
+			                                        <div class="form-group">
+			                                            <textarea name="description" class="form-control" id="description" required></textarea>
+			                                        </div>
+		                                        </fieldset>
+		                                        <fieldset>
+			                                        <legend class="mb-1 mt-2">Période de l'évènement</legend>
+			                                        <div class="row form-group">
+			                                            <div class="col">
+			                                                <label for="set-eventBeginningDate" class="mt-2 mb-1">Date de début</label>
+			                                                <input id="set-eventBeginningDate" type="date" name="eventBeginningDate" class="form-control" required>
+			                                            </div>
+			                                            <div class="col">
+			                                            	<label for="set-eventEndingDate" class="mt-2 mb-1">Date de fin</label>
+			                                                <input id="set-eventEndingDate" type="date" name="eventEndingDate" class="form-control" required>
+			                                            </div>
+			                                        </div>
+		                                        </fieldset>
+		                                        <fieldset>
+			                                        <legend class="mb-1 mt-2">Inscriptions des éditeurs et protozone</legend>
+			                                        <div class="row form-group">
+			                                            <div class="col">
+			                                            	<label for="set-editorsRegistrationBeginDate" class="mt-2 mb-1">Date de début</label>
+			                                                <input type="date" name="editorsRegistrationBeginDate" id="set-editorsRegistrationBeginDate" class="form-control" required>
+			                                            </div>
+			                                            <div class="col">
+			                                            	<label for="set-editorsRegistrationEndDate" class="mt-2 mb-1">Date de fin</label>
+			                                                <input type="date" name="editorsRegistrationEndDate" id="set-editorsRegistrationEndDate" class="form-control" required>
+			                                            </div>
+			                                        </div>
+		                                        </fieldset>
+		                                        <fieldset>
+			                                        <legend class="mb-1 mt-2">Inscriptions des boutiques</legend>
+			                                        <div class="row form-group">
+			                                            <div class="col">
+			                                            	<label for="set-shopsRegistrationBeginDate" class="mt-2 mb-1">Date de début</label>
+			                                                <input type="date" name="shopsRegistrationBeginDate" id="set-shopsRegistrationBeginDate" class="form-control" required>
+			                                            </div>
+			                                            <div class="col">
+			                                            	<label for="set-shopsRegistrationEndDate" class="mt-2 mb-1">Date de fin</label>
+			                                                <input type="date" name="shopsRegistrationEndDate" id="set-shopsRegistrationEndDate" class="form-control" required>
+			                                            </div>
+			                                        </div>
+		                                        </fieldset>
+		                                        <fieldset>
+		                                        	<legend class="mb-1 mt-2">Inscriptions des bénévoles</legend>
+			                                        <div class="row form-group">
+			                                            <div class="col">
+			                                            	<label for="set-volunteersRegistrationBeginDate" class="mt-2 mb-1">Date de début</label>
+			                                                <input type="date" name="volunteersRegistrationBeginDate" id="set-volunteersRegistrationBeginDate" class="form-control" required>
+			                                            </div>
+			                                            <div class="col">
+			                                            	<label for="set-volunteersRegistrationEndDate" class="mt-2 mb-1">Date de fin</label>
+			                                                <input type="date" name="volunteersRegistrationEndDate" id="set-volunteersRegistrationEndDate" class="form-control" required>
+			                                            </div>
+			                                        </div>
+		                                        </fieldset>
+		                                    </div>
+		                                    <div class="col-12 col-sm-6">	                                    
+		                                        <fieldset>
+			                                        <legend>Nombre de tables</legend>
+			                                        <div class="row form-groupd-flex flex-column">
+			                                            <div class="col">
+			                                            	<label for="set-tables">Total de tables pour l'évènement</label>
+			                                                <input type="text" name="tables" id="set-tables" class="form-control" required>
+			                                            </div>
+			                                            <div class="col">
+			                                            	<label for="set-maxTablesPerEditor" class="mt-2 mb-1">Maximum de table par éditeur</label>
+			                                                <input type="text" id="set-maxTablesPerEditor" name="maxTablesPerEditor" class="form-control" required>
+			                                            </div>
+			                                            <div class="col">
+			                                            	<label for="set-protozoneTables" class="mt-2 mb-1">Total de tables pour la protozone</label>
+			                                                <input type="text" id="set-protozoneTables" name="protozoneTables" class="form-control" required>
+			                                            </div>
+			                                        </div>
+		                                        </fieldset>
+		                                        <fieldset class="mt-3">
+			                                        <legend>Prix (€)</legend>
+			                                        <div class="row form-group d-flex flex-column">
+			                                            <div class="col">
+			                                            	<label for="set-pricePerTable">Prix par table</label>
+			                                                <input type="text" id="set-pricePerTable" name="pricePerTable" class="form-control" required>
+			                                            </div>
+			                                            <div class="col">
+			                                            	<label for="set-discount" class="mt-2 mb-1">Nombre de tables achetées pour 1 gratuite</label>
+			                                                <input type="number" id="set-discount" name="discount" class="form-control" required>
+			                                            </div>
+			                                            <div class="col">
+			                                            	<label for="set-saleOptionPrice"  class="mt-2 mb-1">Prix de l'option vente éditeurs</label>
+			                                                <input type="text" id="set-saleOptionPrice" name="saleOptionPrice" class="form-control" required>
+			                                            </div>
+			                                            <div class="col">
+			                                            	<label for="set-ShopPrice"  class="mt-2 mb-1">Prix d'inscription pour les boutiques</label>
+			                                                <input type="text" id="set-ShopPrice" name="shopPrice" class="form-control" required>
+			                                            </div>
+			                                        </div>
+		                                        </fieldset>
+		                                        <fieldset class="mt-3 planningWarning">
+			                                        <legend>Planning bénévoles</legend>
+			                                        <div class="row form-group d-flex flex-column">
+			                                            <div class="col">
+			                                            	<p class="mb-1">Afin de finaliser votre évènement</p>
+			                                            	<ul>
+			                                            		<li>Créez des taches et des tranches horaires dans les onglets associés</li>
+			                                            		<li>Associez les taches souhaitées à votre évènement grâce à l'option d'édition</li>
+			                                            	</ul>
+			                                            </div>
+			                                        </div>
+		                                        </fieldset>
+		                                     </div>
+                                       	 </div>
+                                        <div class="d-flex justify-content-center my-4">
+	                                        <button type="submit" class="btn btnCustom">Créer un évènement</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header d-flex px-0" id="headingUpdateEvent">
+                                <h2 class="mb-0 col-12 px-3">
+                                    <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseUpdateEvent" aria-expanded="true" aria-controls="collapseUpdateEvent">
+ 										<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                        <p class="my-0">Editer un évènement futur ou en cours</p>
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapseUpdateEvent" th:class="${(toggleCard == 'updateEvent')? 'collapse show' : 'collapse'}" aria-labelledby="headingUpdateEvent " data-parent="#accordionEventCrud">
+                                <div class="card-body">
+                                    <div class="col-12 px-0">
+                                        <h3>Liste des évènements actuels</h3>
+                                        <table class="table">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Nom</th>
+                                                    <th scope="col"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="event : ${events}">
+                                                    <th scope="row" th:text="${event.id}">1</th>
+                                                    <td th:text="${event.name}">Mark</td>
+                                                    <td class="d-flex justify-content-end align-items-center">
+                                                        <form method="post" th:action="@{/admin/selectEvent}" class="m-0 p-0">
+                                                            <input type="hidden" name="eventId" th:value="${event.id}">
+                                                            <button class="svg-btn" type="submit" data-toggle="collapse" data-target="#collapseUpdateEvent" aria-expanded="false" aria-controls="collapseUpdateEvent">
+                                                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                                    <path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                        <form method="post" th:action="@{/admin/deleteEvent}" th:if="${event.editorRegList.size()} ==0 AND ${event.volunteerRegList.size()} ==0 AND ${event.shopRegList.size()} ==0 AND ${event.protozoneRegList.size()} ==0">
+                                                            <input type="hidden" name="eventId" th:value="${event.id}">
+                                                            <button type="submit" class="btn" onclick="return confirm('Etes-vous sûrs de vouloir supprimer cet évènement ? Il sera définitivement effacé de la base de donnée !');">
+                                                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                                    <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                        <div th:unless="${event.editorRegList.size()} ==0 AND ${event.volunteerRegList.size()} ==0 AND ${event.shopRegList.size()} ==0 AND ${event.protozoneRegList.size()} ==0" class="btn">
+                                                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                        			<title>Impossible de supprimer, inscriptions enregistrées</title>
+                                                        	        <path fill="grey" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+                                                                </svg>
+                                                        
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div th:class="${(selectedEvent == null)? 'collapse' : 'collapse show'}" id="collapseSelectedEvent">
+	                                    <div class="container">
+								 	        <div class="row justify-content-center">
+										  		<hr class="col-10 my-3 p-0"/>
+									        </div>
+								        </div>
+                                        <div>
+                                            <h3 id="updateEvent" class="my-4" th:text="|Modifier l'évènement : ${selectedEvent?.name}|">Modifier un évènement</h3>
+                                            <div class="d-flex flex-wrap">
+	                                            <form method="post" th:action="@{/admin/updateEvent}" class="d-flex flex-column col-12 col-md-6 border" th:if="${selectedEvent != null}" th:object="${selectedEvent}">
+	                                            	<h4 class="my-3">Informations générales</h4>
+	                                                <input type="hidden" name="id" th:field="*{id}">
+	                                                <div class="form-group">
+	                                                    <label for="name">Nom</label>
+	                                                    <input type="text" name="name" class="form-control" id="name" th:field="*{name}" required>
+	                                                </div>
+	                                                <div class="form-group">
+	                                                    <label for="description">Description</label>
+	                                                    <textarea name="description" class="form-control" id="description" th:field="*{description}" required></textarea>
+	                                                </div>
+	                                                <p>Période de l'évènement</p>
+	                                                <div class="row form-group">
+	                                                    <div class="col">
+	                                                        <input type="date" name="eventBeginningDate" class="form-control" th:field="*{eventBeginningDate}" required>
+	                                                        <small class="form-text text-muted">Date de début</small>
+	                                                    </div>
+	                                                    <div class="col">
+	                                                        <input type="date" name="eventEndingDate" class="form-control" th:field="*{eventEndingDate}" required>
+	                                                        <small class="form-text text-muted">Date de fin</small>
+	                                                    </div>
+	                                                </div>
+	                                                <p>Inscription des éditeurs et protozone</p>
+	                                                <div class="row form-group">
+	                                                    <div class="col">
+	                                                        <input type="date" name="editorsRegistrationBeginDate" class="form-control" th:field="*{editorsRegistrationBeginDate}" required>
+	                                                        <small class="form-text text-muted">Date de début</small>
+	                                                    </div>
+	                                                    <div class="col">
+	                                                        <input type="date" name="editorsRegistrationEndDate" class="form-control" th:field="*{editorsRegistrationEndDate}" required>
+	                                                        <small class="form-text text-muted">Date de fin</small>
+	                                                    </div>
+	                                                </div>
+	                                                <p>Inscription des boutiques</p>
+	                                                <div class="row form-group">
+	                                                    <div class="col">
+	                                                        <input type="date" name="shopsRegistrationBeginDate" class="form-control" th:field="*{shopsRegistrationBeginDate}" required>
+	                                                        <small class="form-text text-muted">Date de début</small>
+	                                                    </div>
+	                                                    <div class="col">
+	                                                        <input type="date" name="shopsRegistrationEndDate" class="form-control" th:field="*{shopsRegistrationEndDate}" required>
+	                                                        <small class="form-text text-muted">Date de fin</small>
+	                                                    </div>
+	                                                </div>
+	                                                <p>Inscription des bénévoles</p>
+	                                                <div class="row form-group">
+	                                                    <div class="col">
+	                                                        <input type="date" name="volunteersRegistrationBeginDate" class="form-control" th:field="*{volunteersRegistrationBeginDate}" required>
+	                                                        <small class="form-text text-muted">Date de début</small>
+	                                                    </div>
+	                                                    <div class="col">
+	                                                        <input type="date" name="volunteersRegistrationEndDate" class="form-control" th:field="*{volunteersRegistrationEndDate}" required>
+	                                                        <small class="form-text text-muted">Date de fin</small>
+	                                                    </div>
+	                                                </div>
+	                                                <p>Nombre de tables</p>
+	                                                <div class="row form-group flex-column flex-sm-row">
+	                                                    <div class="col">
+	                                                        <input type="text" name="tables" class="form-control" placeholder="Total de tables pour l'évènement" th:field="*{tables}" required>
+	                                                        <small class="form-text text-muted">Total de tables pour l'évènement</small>
+	                                                    </div>
+	                                                    <div class="col">
+	                                                        <input type="text" name="maxTablesPerEditor" class="form-control" placeholder="Maximum de table par éditeur" th:field="*{maxTablesPerEditor}" required>
+	                                                     	<small class="form-text text-muted">Maximum de table par éditeur</small>	                                                        
+	                                                    </div>
+	                                                    <div class="col">
+	                                                        <input type="text" name="protozoneTables" class="form-control" placeholder="Total de tables pour la protozone" th:field="*{protozoneTables}" required>
+	                                                        <small class="form-text text-muted">Total de tables pour la protozone</small>
+	                                                    </div>
+	                                                </div>
+	                                                <p>Prix</p>
+	                                                <div class="row form-group flex-column flex-sm-row">
+	                                                    <div class="col">
+	                                                        <input type="text" name="pricePerTable" class="form-control" placeholder="Prix par table" th:field="*{pricePerTable}" required>
+	                                                        <small class="form-text text-muted">Prix par table (€)</small>
+	                                                    </div>
+	                                                    <div class="col">
+	                                                        <input type="number" name="discount" class="form-control" placeholder="Nombre de tables achetées pour 1 gratuite" th:field="*{discount}" required>
+	                                                        <small class="form-text text-muted">Nombre de tables achetées pour 1 gratuite</small>
+	                                                    </div>
+	                                                </div>
+	                                                <div class="row form-group flex-column flex-sm-row">
+			                                            <div class="col">
+	                                                        <input type="text" name="saleOptionPrice" class="form-control" placeholder="Montant de l'option vente" th:field="*{saleOptionPrice}" required>
+	                                                        <small class="form-text text-muted">Montant de l'option vente (€)</small>
+	                                                    </div>
+		                                                <div class="col">
+	                                                        <input type="text" name="shopPrice" class="form-control" placeholder="Prix pour les boutique" th:field="*{shopPrice}" required>
+	                                                        <small class="form-text text-muted">Prix pour les boutiques (€)</small>
+	                                                    </div>
+	                                                </div>
+	                                                <div class="d-flex justify-content-center my-3">
+		                                                <button type="submit" class="btn btnCustom mx-auto">Modifier</button>
+                                               		</div>
+	                                            </form>
+	                                            <div class="col-12 col-md-6 border" th:if="${selectedEvent != null}" th:object="${selectedEvent}">
+	                                            	<h4 class="my-3">Taches bénévoles</h4>
+	                                            	<ul class="list-group mt-0 mt-md-5" th:if="*{eventTasks != null}">
+													  <li class="list-group-item disabled" aria-disabled="true">Nom</li>
+													  <li th:each="eventTask : *{eventTasks}" class="list-group-item d-flex justify-content-between align-items-center">
+														  <p th:text="${eventTask?.task?.name}"></p>
+														   <form method="post" th:action="@{/admin/deleteTaskFromEvent}">
+	                                                          <input type="hidden" name="eventTaskId" th:value="${eventTask.id}">
+	                                                          <input type="hidden" name="eventId" th:value="${selectedEvent?.id}">
+	                                                          <button type="submit" class="svg-btn" onclick="return confirm('Etes-vous sûrs de vouloir supprimer cette tache du l'évènement ?');">
+	                                                              <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+	                                                                  <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+	                                                              </svg>
+	                                                          </button>
+	                                                      </form>
+													  </li>
+													  <li class="list-group-item">
+													  	<label for="addEventTask">Ajouter : </label>
+													  	<form method="post" th:action="@{/admin/addTaskToEvent}" class="d-flex justify-content-between flex-wrap">
+													  		<input type="hidden" name="eventId" th:value="${selectedEvent?.id}">
+														  	<select name="taskId" id="addEventTask">
+														  		<option th:each="task : ${tasks}" th:value="${task.id}" th:text="${task.name}"></option>
+														  	</select>
+														  	<button type="submit" class="btn btnCustom">Ajouter la tache</button>
+													  	</form>
+													  </li>
+													</ul>	                                            
+	                                            </div>	                                            	                                         
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header d-flex px-0" id="headingTask">
+                                <h2 class="mb-0 col-12 px-3">
+                                    <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseTask" aria-expanded="true" aria-controls="collapseTask">
+ 										<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                        <p class="my-0">Gestion des taches bénévoles</p>
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapseTask" th:class="${(toggleCard == 'task')? 'collapse show' : 'collapse'}" aria-labelledby="headingTask" data-parent="#accordionEventCrud">
+                                <div class="card-body d-flex flex-wrap px-0">
+                                    <div class="col-11 col-xl-6 mx-4 px-0">
+                                        <h3 class="mb-4">Liste des taches existantes</h3>
+                                        <table class="table">
+                                            <thead class="thead-dark">
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Nom</th>
+                                                    <th scope="col"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="task : ${tasks}">
+                                                    <th scope="row" th:text="${task.id}">1</th>
+                                                    <td th:text="${task.name}">Mark</td>
+                                                    <td class="d-flex justify-content-end align-items-center">
+                                                        <form method="post" th:action="@{/admin/selectTask}" class="m-0 p-0">
+                                                            <input type="hidden" name="taskId" th:value="${task.id}">
+                                                            <button class="svg-btn" type="submit" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                                    <path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                        <form method="post" th:action="@{/admin/deleteTask}">
+                                                            <input type="hidden" name="taskId" th:value="${task.id}">
+                                                            <button type="submit" class="btn" onclick="return confirm('Etes-vous sûrs de vouloir supprimer cette tache ?');">
+                                                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                                    <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>                                       
+                                    <div class="mx-0 mx-sm-4 col-12 col-md-6 col-xl-3">
+                                        <h3>Créer une nouvelle tache</h3>
+                                        <form method="post" th:action="@{/admin/createTask}" class="d-flex flex-column">
+                                            <div class="d-flex flex-column">
+                                                <label for="taskName">Entrez un nom</label>
+                                                <input type="text" name="name" id="taskName" required>
+                                            </div>
+                                            <div class="my-3">
+                                             <button type="submit" class="btn btnCustom">Créer une tache</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div th:class="|collapse ${(selectedTask == null)? '' : 'show'} ml-3 mt-3 col-6|" id="collapseExample">
+                                       <h3 th:text="|Modifier la tache : ${selectedTask?.name}|">Modifier une tache</h3>
+                                       <form method="post" th:action="@{/admin/updateTask}" class="d-flex flex-column">
+                                           <div class="d-flex flex-column">
+                                               <input type="hidden" name="id" th:value="${selectedTask?.id}">
+                                               <label for="selectedTaskName">Saisir le nouveau nom</label>
+                                               <input type="text" name="name" id="selectedTaskName" required>
+                                           </div>
+                                           <div class="my-3">
+                                            	<button type="submit" class="btn btnCustom m-auto">Modifier</button>
+                                           </div>
+                                       </form>
+                                   </div>                                        
+                                </div>
+                            </div>
+                        </div>
+                        <!-- timeslots -->
+                        <div class="card">
+                            <div class="card-header d-flex px-0" id="headingTimeslots">
+                                <h2 class="mb-0 col-12 px-3">
+                                    <button class="btn btn-link d-flex align-items-center col-12 pl-0" type="button" data-toggle="collapse" data-target="#collapseTimeslot" aria-expanded="true" aria-controls="collapseTimeslot">
+ 										<svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-down" class="svg-inline--fa fa-chevron-down fa-w-14 my-auto btn-inline mr-3" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path></svg>                                                                                                        
+                                        <p class="my-0">Gestion des tranches horaires</p>
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="collapseTimeslot" th:class="${(toggleCard == 'timeslot')? 'collapse show' : 'collapse'}" aria-labelledby="headingTimeslots" data-parent="#accordionEventCrud">
+                                <div class="card-body d-flex flex-wrap px-0">
+                                    <div class="col-11 col-xl-6 mx-4 px-0">
+                                        <h3 class="mb-4">Liste des tranches horaires existantes</h3>
+                                        <table class="table">
+                                            <thead class="thead-dark">
+                                                <tr>
+ 
+                                                    <th scope="col">Ordre</th>
+                                                    <th scope="col">Jour</th>
+                                                    <th scope="col">Description</th>
+                                                    <th scope="col"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="timeSlot : ${timeSlots}">
+ 
+                                                    <th scope="row" th:text="${timeSlot.ordernumber}">1</th>
+                                                    <td th:text="${timeSlot.name}">Mark</td>
+                                                    <td th:text="${timeSlot.description}">Description</td>
+                                                    <td class="d-flex justify-content-end align-items-center">
+                                                        <form method="post" th:action="@{/admin/selectTimeslot}" class="m-0 p-0">
+                                                            <input type="hidden" name="timeslotId" th:value="${timeSlot.id}">
+                                                            <button class="svg-btn" type="submit" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" class="svg-inline--fa fa-edit fa-w-18" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                                                    <path fill="currentColor" d="M402.3 344.9l32-32c5-5 13.7-1.5 13.7 5.7V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V112c0-26.5 21.5-48 48-48h273.5c7.1 0 10.7 8.6 5.7 13.7l-32 32c-1.5 1.5-3.5 2.3-5.7 2.3H48v352h352V350.5c0-2.1.8-4.1 2.3-5.6zm156.6-201.8L296.3 405.7l-90.4 10c-26.2 2.9-48.5-19.2-45.6-45.6l10-90.4L432.9 17.1c22.9-22.9 59.9-22.9 82.7 0l43.2 43.2c22.9 22.9 22.9 60 .1 82.8zM460.1 174L402 115.9 216.2 301.8l-7.3 65.3 65.3-7.3L460.1 174zm64.8-79.7l-43.2-43.2c-4.1-4.1-10.8-4.1-14.8 0L436 82l58.1 58.1 30.9-30.9c4-4.2 4-10.8-.1-14.9z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                        <form method="post" th:action="@{/admin/deleteTimeslot}">
+                                                            <input type="hidden" name="timeslotId" th:value="${timeSlot.id}">
+                                                            <button type="submit" class="btn" onclick="return confirm('Etes-vous sûrs de vouloir supprimer cette tranche horaire?');">
+                                                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="trash-alt" class="svg-inline--fa fa-trash-alt fa-w-14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                                                                    <path fill="currentColor" d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12zM432 80h-82.41l-34-56.7A48 48 0 0 0 274.41 0H173.59a48 48 0 0 0-41.16 23.3L98.41 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0-16-16zM171.84 50.91A6 6 0 0 1 177 48h94a6 6 0 0 1 5.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0-12-12h-24a12 12 0 0 0-12 12v216a12 12 0 0 0 12 12z"></path>
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>                                       
+                                    <div class="mx-0 mx-sm-4 col-12 col-md-6 col-xl-3">
+                                        <h3>Créer une nouvelle tranche horaire</h3>
+                                        <form method="post" th:action="@{/admin/createTimeslot}" class="d-flex flex-column">
+                                            <div class="d-flex flex-column">
+                                                <label for="timeSlotName" class="mb-1 mt-2">Entrez un jour</label>
+                                                <input type="text" name="name" id="timeSlotName" required>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <label for="timeSlotName"class="mt-2 mb-1 mt-3">Entrez une description</label>
+                                                <input type="text" name="description" id="timeSlotDescription" placeholder="ex: 12h - 14h ou garden party" required>
+                                            </div>
+		                                    <div class="d-flex flex-column">
+                                                <label for="timeSlotOrdernumber" class="mt-3 mb-1">Entrez un numéro d'ordre</label>
+                                                <input type="number" name="ordernumber" id="timeSlotOrdernumber" required>
+                                            </div>
+                                            <div class="my-3">
+                                             <button type="submit" class="btn btnCustom">Créer une tranche horaire</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div th:class="|collapse ${(selectedTimeslot == null)? '' : 'show'} ml-3 mt-3 col-6|" id="modifyTimeslot">
+                                       <h3 th:text="|Modifier la tranche horaire : ${selectedTimeslot?.name} ${selectedTimeslot?.description}|">Modifier une tache</h3>
+                                       <form method="post" th:action="@{/admin/updateTimeslot}" class="d-flex flex-column">
+                                           <div class="d-flex flex-column">
+                                               <input type="hidden" name="id" th:value="${selectedTimeslot?.id}">
+                                               <label for="selectedTimeslotName" class="mb-0">Jour</label>
+                                               <input type="text" name="name" id="selectedTimeslotName" required th:value="${selectedTimeslot?.name}">
+                                               <label for="selectedTimeslotDescription" class="mt-2 mb-0">Tranche horaire</label>
+                                               <input type="text" name="description" id="selectedTimeslotDescription" th:value="${selectedTimeslot?.description}" required>
+                                               <label for="selectedTimeslotOrdernumber" class="mt-2 mb-0">Numéro d'ordre</label>
+                                               <input type="number" name="ordernumber" id="selectedTimeslotOrdernumber" th:value="${selectedTimeslot?.ordernumber}" required>
+                                           </div>
+                                           <div class="my-3">
+                                            	<button type="submit" class="btn btnCustom m-auto">Modifier</button>
+                                           </div>
+                                       </form>
+                                   </div>                                        
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div>
+                        <h3 class="my-4">Historique des évènements</h3>
+                        <table class="table">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nom</th>
+                                    <th scope="col">Ouverture</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+	                            <tr th:each="event : ${historicalEvents}">
+	                                <th scope="row" th:text="${event.id}">1</th>
+	                                <td th:text="${event.name}">Mark</td>
+	                                <td th:text="|Du ${#dates.format(event.eventBeginningDate, 'dd/MM/yyyy')} au ${#dates.format(event.eventEndingDate, 'dd/MM/yyyy')}|">Mark</td>
+						    	</tr>
+						  </tbody>
+						</table>
+                    </div>
+                </div>
+	        </div>
+        </section>
+
+	  
+	</div>
+</body>
+	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="../JS/adminHome.js"></script>
+</html>

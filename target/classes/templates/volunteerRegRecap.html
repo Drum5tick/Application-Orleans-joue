@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+	<head>
+		<meta charset="UTF-8">
+	</head>
+	<div class="container containerStyle col-11 col-lg-7 customCard" th:if="${volunteerRegistration.planning!= null and volunteerRegistration.planning.size()!=0}" th:each="volunteerRegistration : ${volunteerReg}" th:fragment="regRecap :: volunteerRegRecap">
+		<div class="card">
+			<div class="card-header">
+				<h3 th:text="|Votre planning durant l'évènement : ${volunteerRegistration.event.name}|"></h3>	
+			</div>
+			<div class="card-body p-2 p-md-3">
+				<div th:each="volunteerSchedule : ${volunteerRegistration.planning}">
+					<div >	
+						<ul class="my-1">
+							<li class="ml-5 " th:text="|${volunteerSchedule.timeSlotName} ${volunteerSchedule.timeSlotDescription} : ${volunteerSchedule.taskName}|"></li>
+						</ul>
+					</div>
+				</div>		
+			</div>
+		</div>
+	</div>		
+	<div class="container containerStyle col-11 col-lg-7 customCard" th:each="volunteerRegistration : ${volunteerReg}" th:fragment="regRecap :: volunteerRegRecap">
+		<div class="col-sm-12 p-0">
+			<div class="card">
+				<div class="card-header">
+					<h3 th:text="|Récapitulatif inscription évènement :	${volunteerRegistration.event.name}|"></h3>	
+				</div>
+				<div class="card-body p-2 p-md-3">
+					<h4 class="card-title mt-2" th:text="|Demande d'inscription effectuée le ${#dates.format(volunteerRegistration.subscriptionDate, 'dd/MM/yyyy')}|"></h4>
+					<p class="row text-center justify-content-center mb-1 mt-3">
+						<span class="badge badge-pill badge-warning d-inline-flex align-items-center justify-content-center yellowBadge" th:if="${volunteerRegistration.state} == 'pending'">EN ATTENTE</span>
+						<span class="badge badge-pill badge-warning d-inline-flex align-items-center justify-content-center yellowBadge" th:if="${volunteerRegistration.state} == 'canceled'">ANNULATION DEMAND&Eacute;E</span>
+						<span class="badge badge-pill badge-success d-inline-flex align-items-center justify-content-center" th:if="${volunteerRegistration.state} == 'validated'">VALIDÉE</span> 
+						<span class="badge badge-pill badge-danger d-inline-flex align-items-center justify-content-center" th:if="${volunteerRegistration.state} == 'rejected'">REFUSÉE</span>
+					</p>
+					<fieldset class="border p-2 p-sm-3 text-left">
+						<legend class="w-auto px-1">Évènement</legend>
+						<h5 th:text="|${volunteerRegistration.event.name} ouvre ses portes du ${#dates.format(volunteerRegistration.event.eventBeginningDate, 'dd/MM/yyyy')} au ${#dates.format(volunteerRegistration.event.eventEndingDate, 'dd/MM/yyyy')}|"></h5>
+						<p th:text="${volunteerRegistration.event.description}"></p>
+					</fieldset>
+					<fieldset class="border p-2 p-sm-3 text-left my-3">
+						<legend class="w-auto px-1">Récapitulatif de vos demandes</legend>
+						<p class="w-auto">Activité(s) souhaitée(s)</p>
+						<ul th:if="${#lists.size(volunteerRegistration.chosenTasks) > 0}">
+							<li class="ml-5" th:each="task : ${volunteerRegistration.chosenTasks}" th:text="${task.name}"></li>
+						</ul>
+						<div class="row align-items-center" th:unless="${#lists.size(volunteerRegistration.chosenTasks) > 0}">
+							<p class="col-12 col-sm-10 text-danger ml-2">Pas de taches choisies</p>
+						</div>
+						<p class="w-auto">Vos disponibilités</p>
+						<ul th:if="${#lists.size(volunteerRegistration.chosenTimeSlot) > 0}">
+							<li class="ml-5" th:each="timeSlot : ${volunteerRegistration.chosenTimeSlot}" th:text="|${timeSlot.name} ${timeSlot.description}|"></li>
+						</ul>
+						<div class="row align-items-center" th:unless="${#lists.size(volunteerRegistration.chosenTimeSlot) > 0}">
+							<p class="col-12 col-sm-10 text-danger ml-2">Pas de disponiblitités précisées</p>
+						</div>
+						<div th:if="${volunteerRegistration.comments != null and volunteerRegistration.comments != ''}">
+							<p class="w-auto">Vos commentaires</p>
+							<div class="row align-items-center">
+								<div class="col-sm-12 ml-2">
+									<p th:text="${volunteerRegistration.comments}"></p>
+								</div>
+							</div>  
+						</div>
+					</fieldset>
+					<form class="d-flex justify-content-center justify-content-md-end mt-4"  method="post" th:action="@{/modificationInscriptionEvenementBenevole}">
+						<button th:if="${volunteerRegistration.state} != 'canceled' AND ${volunteerRegistration.planning.size()} == 0" type="submit" class=" btn btn-primary subscribeModifBtn" name="submitBtn">Modifier ma demande</button>
+						<a th:if="${volunteerRegistration.state} != 'canceled' AND ${volunteerRegistration.planning.size()} != 0"  class=" btn btn-primary subscribeModifBtn" name="submitBtn" href="javascript: alert('Un planning vous a été affecté, merci de prendre contact avec l\'administrateur du site afin de modifier votre demande.');">Modifier ma demande</a>
+						<input type="hidden" id="regitration" name="registrationId" th:value="${volunteerRegistration.id}">
+					</form>
+					<form class="d-flex justify-content-center justify-content-md-end my-3"  method="post" th:action="@{/cancelVolunteerRegistration}">
+						<button th:if="${volunteerRegistration.state} != 'canceled' AND ${volunteerRegistration.planning.size()} == 0" type="submit" class=" btn btn-primary subscribeModifBtn" onclick="return confirm('Etes-vous sûr de vouloir annuler votre inscription ?');" >Annuler ma demande</button>
+						<a th:if="${volunteerRegistration.state} != 'canceled' AND ${volunteerRegistration.planning.size()} != 0"  class=" btn btn-primary subscribeModifBtn" name="submitBtn" href="javascript: alert('Un planning vous a été affecté, merci de prendre contact avec l\'administrateur du site afin d\'annuler votre inscription.');">Annuler ma demande</a>
+						<input type="hidden" id="registration" name="volunteerRegId" th:value="${volunteerRegistration.id}">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</html>

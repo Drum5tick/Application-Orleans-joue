@@ -1,0 +1,87 @@
+.navbar {
+    background-color: var(--orange);
+}
+
+.nav-link {
+    color: white !important;
+    font-size: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.subscribeTitle{
+	width:90%;
+}
+
+.navElement:hover {
+    background: white;
+    border-radius: 5px;
+    color: var(--orange) !important;
+    animation: growUp 0.5s
+}
+
+#event:target .nav-item:first-child {
+    font-weight: bold;
+}
+
+nav li a {
+    transition: all .2s;
+    transition-property: all;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+}
+
+.selected {
+    font-weight: bold;
+    box-shadow: 0 2px 0 #fff;
+}
+
+@keyframes growUp {
+    from {
+        font-size: 20px;
+    }
+
+    to {
+        background: white;
+    }
+}
+
+.navBarTitle {
+	font-size: 2.2rem;
+	font-family: 'acme';
+	color: white;
+	margin: auto;
+}
+
+.navProfileBtn:hover {
+	color: white;
+	background-color: var(--orange);
+}
+
+.userAccountModifTitle {
+	margin-left: 4.5%;
+}
+
+.navbar-toggler-icon {
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e")!important;
+	height: 3rem;
+}
+
+.navbarAvatar {
+	height: 43px;
+	width:43px;
+	overflow: hidden;
+}
+
+.navbarAvatar img {
+	height: 100%;
+	width: 100%;
+}
+
+@media (max-width: 768px) {
+	
+	.navBarTitle {
+		font-size: 1.7rem;
+	}
+}
